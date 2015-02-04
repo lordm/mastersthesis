@@ -1,8 +1,11 @@
-all: thesis
+all: report
 .PHONY: all
 
 clean:
-	rm -rf *.o *.aux *.log *.out
+	rm -rf *.o *.aux *.log *.out *.bbl *.blg
 
 thesis:
 	pdflatex thesis.tex
+
+report:
+	pdflatex trifocalgeometry.tex
