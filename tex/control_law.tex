@@ -1,0 +1,261 @@
+\section{Control Law}
+To formulate the control law of the trifocal tensor based visual servoing, we need to establish the model of the system and find the relation between the input of the control and the trifocal tensor coefficients. The trifocal tensor can be computed from feature correspondences across the three views. Our goal is to find the interaction matrix relating the control input and the tensor derivatives.
+\begin{equation}
+  \dot{\mathcal{T}}_{(jkl)} = L_{\mathcal{T}_{(jkl)}} \begin{pmatrix} v_c \\ w_c \end{pmatrix}
+\end{equation}
+
+\subsection{Coefficients of the Trifocal Tensor}
+To compute the relation between the coefficients of the trifocal tensor and the Projective matrices, first we write the Tensor relation \eqref{eq:trifocalgeometry1} with the proper visual servoing notation as follows
+\begin{equation}
+  \mathcal{T}_{(jkl)} = a_{(kj)}b_{(4l)} - a_{(4k)}b_{(lj)} \label{eq:tensorrelation}
+\end{equation}
+
+For the sake of maintaining the Visual Servoing convention, we omit the use of $i$ as an index for the tensor relation. The letter $i$ further on will be indicating the initial view in the control system. The Camera positions are then written as $C_{c^*},C_c,C_i$ for the desired, current, and initial camera positions respectively. The same may also be done for the projection matrices, and instead of using the matrices $A,B$ to express the homography between the first and second or third views, we will use the standard notation from Visual Servoing with the corresponding Rotation matrices $^{c}R_{c^*}, ^{i}R_{c^*}$ respectively. For the translations $a_4, b_4$, we will use $^{c}{t}_{c^*}, ^{i}{t}_{c^*}$ respectively. Leading superscripts will denote the frame with respect to which a set of coordinates are defined. Thus, the rotation matrix $^{c}R_{c^*}$ gives the orientation of the desired camera frame relative to the current camera frame.
+
+\begin{align*}
+  C &\Rightarrow C_{c^*} \text{  Desired camera position} \\
+  C' &\Rightarrow C_c \text{  Current camera position} \\
+  C^{''} &\Rightarrow C_i \text{  Initial camera position} \\
+\end{align*}
+\begin{gather*}
+  P_d = P = [I | 0]\\
+  P_c = P^{\prime} = [A | a_4] : ^{c}{\bf M}_{c^*} = [ ^{c}{\bf R}_{c^*} | ^{c}{\bf t}_{c^*} ]\\
+  P_i = P^{\prime \prime} = [B | b_4] : ^{i}{\bf M}_{c^*} = [ ^{i}{\bf R}_{c^*} | ^{i}{\bf t}_{c^*} ]
+\end{gather*}
+
+The Tensor relation \eqref{eq:tensorrelation} can then be expressed as follows
+\begin{equation}
+\mathcal{T}_{(jkl)} = \tensor[^{c}]{R}{_{c^{*}(kj)}} \ \tensor[^{i}]{t}{_{c^{*}(l)}} - \tensor[^{c}]{t}{_{c^{*}(k)}} \ \tensor[^{i}]{R}{_{c^{*}(lj)}} \label{eq:tensorcoeffs}
+\end{equation}
+
+Expanding this relation further to compute the tensor coefficients is straight forward, expanding for values of $j,k,l$ we get the following tensor coefficients:
+
+\begin{equation}
+\begin{gathered}
+  \mathcal{T}_{(111)} = \tensor[^{c}]{R}{_{c^{*}(11)}} \ \tensor[^{i}]{t}{_{c^{*}(1)}} - \tensor[^{c}]{t}{_{c^{*}(1)}} \ \tensor[^{i}]{R}{_{c^{*}(11)}}\\
+  \mathcal{T}_{(112)} = \tensor[^{c}]{R}{_{c^{*}(11)}} \ \tensor[^{i}]{t}{_{c^{*}(2)}} - \tensor[^{c}]{t}{_{c^{*}(1)}} \ \tensor[^{i}]{R}{_{c^{*}(21)}}\\
+  \mathcal{T}_{(113)} = \tensor[^{c}]{R}{_{c^{*}(11)}} \ \tensor[^{i}]{t}{_{c^{*}(3)}} - \tensor[^{c}]{t}{_{c^{*}(1)}} \ \tensor[^{i}]{R}{_{c^{*}(31)}}\\
+  \mathcal{T}_{(121)} = \tensor[^{c}]{R}{_{c^{*}(21)}} \ \tensor[^{i}]{t}{_{c^{*}(1)}} - \tensor[^{c}]{t}{_{c^{*}(2)}} \ \tensor[^{i}]{R}{_{c^{*}(11)}}\\
+  \mathcal{T}_{(122)} = \tensor[^{c}]{R}{_{c^{*}(21)}} \ \tensor[^{i}]{t}{_{c^{*}(2)}} - \tensor[^{c}]{t}{_{c^{*}(2)}} \ \tensor[^{i}]{R}{_{c^{*}(21)}}\\
+  \mathcal{T}_{(123)} = \tensor[^{c}]{R}{_{c^{*}(21)}} \ \tensor[^{i}]{t}{_{c^{*}(3)}} - \tensor[^{c}]{t}{_{c^{*}(2)}} \ \tensor[^{i}]{R}{_{c^{*}(31)}}\\
+  \mathcal{T}_{(131)} = \tensor[^{c}]{R}{_{c^{*}(31)}} \ \tensor[^{i}]{t}{_{c^{*}(1)}} - \tensor[^{c}]{t}{_{c^{*}(3)}} \ \tensor[^{i}]{R}{_{c^{*}(11)}}\\
+  \mathcal{T}_{(132)} = \tensor[^{c}]{R}{_{c^{*}(31)}} \ \tensor[^{i}]{t}{_{c^{*}(2)}} - \tensor[^{c}]{t}{_{c^{*}(3)}} \ \tensor[^{i}]{R}{_{c^{*}(21)}}\\
+  \mathcal{T}_{(133)} = \tensor[^{c}]{R}{_{c^{*}(31)}} \ \tensor[^{i}]{t}{_{c^{*}(3)}} - \tensor[^{c}]{t}{_{c^{*}(3)}} \ \tensor[^{i}]{R}{_{c^{*}(31)}}\\
+  \mathcal{T}_{(211)} = \tensor[^{c}]{R}{_{c^{*}(12)}} \ \tensor[^{i}]{t}{_{c^{*}(1)}} - \tensor[^{c}]{t}{_{c^{*}(1)}} \ \tensor[^{i}]{R}{_{c^{*}(12)}}\\
+  \mathcal{T}_{(212)} = \tensor[^{c}]{R}{_{c^{*}(12)}} \ \tensor[^{i}]{t}{_{c^{*}(2)}} - \tensor[^{c}]{t}{_{c^{*}(1)}} \ \tensor[^{i}]{R}{_{c^{*}(22)}}\\
+  \mathcal{T}_{(213)} = \tensor[^{c}]{R}{_{c^{*}(12)}} \ \tensor[^{i}]{t}{_{c^{*}(3)}} - \tensor[^{c}]{t}{_{c^{*}(1)}} \ \tensor[^{i}]{R}{_{c^{*}(32)}}\\
+  \mathcal{T}_{(221)} = \tensor[^{c}]{R}{_{c^{*}(22)}} \ \tensor[^{i}]{t}{_{c^{*}(1)}} - \tensor[^{c}]{t}{_{c^{*}(2)}} \ \tensor[^{i}]{R}{_{c^{*}(12)}}\\
+  \mathcal{T}_{(222)} = \tensor[^{c}]{R}{_{c^{*}(22)}} \ \tensor[^{i}]{t}{_{c^{*}(2)}} - \tensor[^{c}]{t}{_{c^{*}(2)}} \ \tensor[^{i}]{R}{_{c^{*}(22)}}\\
+  \mathcal{T}_{(223)} = \tensor[^{c}]{R}{_{c^{*}(22)}} \ \tensor[^{i}]{t}{_{c^{*}(3)}} - \tensor[^{c}]{t}{_{c^{*}(2)}} \ \tensor[^{i}]{R}{_{c^{*}(32)}}\\
+  \mathcal{T}_{(231)} = \tensor[^{c}]{R}{_{c^{*}(32)}} \ \tensor[^{i}]{t}{_{c^{*}(1)}} - \tensor[^{c}]{t}{_{c^{*}(3)}} \ \tensor[^{i}]{R}{_{c^{*}(12)}}\\
+  \mathcal{T}_{(232)} = \tensor[^{c}]{R}{_{c^{*}(32)}} \ \tensor[^{i}]{t}{_{c^{*}(2)}} - \tensor[^{c}]{t}{_{c^{*}(3)}} \ \tensor[^{i}]{R}{_{c^{*}(22)}}\\
+  \mathcal{T}_{(233)} = \tensor[^{c}]{R}{_{c^{*}(32)}} \ \tensor[^{i}]{t}{_{c^{*}(3)}} - \tensor[^{c}]{t}{_{c^{*}(3)}} \ \tensor[^{i}]{R}{_{c^{*}(32)}}\\
+  \mathcal{T}_{(311)} = \tensor[^{c}]{R}{_{c^{*}(13)}} \ \tensor[^{i}]{t}{_{c^{*}(1)}} - \tensor[^{c}]{t}{_{c^{*}(1)}} \ \tensor[^{i}]{R}{_{c^{*}(13)}}\\
+  \mathcal{T}_{(312)} = \tensor[^{c}]{R}{_{c^{*}(13)}} \ \tensor[^{i}]{t}{_{c^{*}(2)}} - \tensor[^{c}]{t}{_{c^{*}(1)}} \ \tensor[^{i}]{R}{_{c^{*}(23)}}\\
+  \mathcal{T}_{(313)} = \tensor[^{c}]{R}{_{c^{*}(13)}} \ \tensor[^{i}]{t}{_{c^{*}(3)}} - \tensor[^{c}]{t}{_{c^{*}(1)}} \ \tensor[^{i}]{R}{_{c^{*}(33)}}\\
+  \mathcal{T}_{(321)} = \tensor[^{c}]{R}{_{c^{*}(23)}} \ \tensor[^{i}]{t}{_{c^{*}(1)}} - \tensor[^{c}]{t}{_{c^{*}(2)}} \ \tensor[^{i}]{R}{_{c^{*}(13)}}\\
+  \mathcal{T}_{(322)} = \tensor[^{c}]{R}{_{c^{*}(23)}} \ \tensor[^{i}]{t}{_{c^{*}(2)}} - \tensor[^{c}]{t}{_{c^{*}(2)}} \ \tensor[^{i}]{R}{_{c^{*}(23)}}\\
+  \mathcal{T}_{(323)} = \tensor[^{c}]{R}{_{c^{*}(23)}} \ \tensor[^{i}]{t}{_{c^{*}(3)}} - \tensor[^{c}]{t}{_{c^{*}(2)}} \ \tensor[^{i}]{R}{_{c^{*}(33)}}\\
+  \mathcal{T}_{(331)} = \tensor[^{c}]{R}{_{c^{*}(33)}} \ \tensor[^{i}]{t}{_{c^{*}(1)}} - \tensor[^{c}]{t}{_{c^{*}(3)}} \ \tensor[^{i}]{R}{_{c^{*}(13)}}\\
+  \mathcal{T}_{(332)} = \tensor[^{c}]{R}{_{c^{*}(33)}} \ \tensor[^{i}]{t}{_{c^{*}(2)}} - \tensor[^{c}]{t}{_{c^{*}(3)}} \ \tensor[^{i}]{R}{_{c^{*}(23)}}\\
+  \mathcal{T}_{(333)} = \tensor[^{c}]{R}{_{c^{*}(33)}} \ \tensor[^{i}]{t}{_{c^{*}(3)}} - \tensor[^{c}]{t}{_{c^{*}(3)}} \ \tensor[^{i}]{R}{_{c^{*}(33)}}
+\end{gathered}\label{eq:tensorcoeffsexpanded}
+\end{equation}
+
+\pagebreak
+
+Our objective is to move our robot from the initial camera position to the desired target camera position. Therefore, we have two special cases for the tensor coefficients values.
+\begin{description}
+  \item[First when $C_c$ at the initial position $C_i$] \hfill
+    \begin{equation}
+    \begin{gathered}
+      \tensor[^{c}]{R}{_{c^{*}}} = \tensor[^{i}]{R}{_{c^{*}}}, \ \tensor[^{c}]{t}{_{c^{*}}} = \tensor[^{i}]{t}{_{c^{*}}}\\
+      \mathcal{T}_{(jkl)}^{i} = \tensor[^{c}]{R}{_{c^{*}(kj)}} \ \tensor[^{c}]{t}{_{c^{*}(l)}} - \tensor[^{c}]{t}{_{c^{*}(k)}} \ \tensor[^{c}]{R}{_{c^{*}(lj)}}\\
+      \text{when } k = l, \mathcal{T}_{(jkl)}^{i} = 0\\
+      \mathcal{T}_{(112)}^{i} = -\mathcal{T}_{(121)}^{i}, \mathcal{T}_{(113)}^{i} = -\mathcal{T}_{(131)}^{i}, \mathcal{T}_{(123)}^{i} = -\mathcal{T}_{(132)}^{i}\\
+      \mathcal{T}_{(212)}^{i} = -\mathcal{T}_{(221)}^{i}, \mathcal{T}_{(213)}^{i} = -\mathcal{T}_{(231)}^{i}, \mathcal{T}_{(223)}^{i} = -\mathcal{T}_{(232)}^{i}\\
+      \mathcal{T}_{(312)}^{i} = -\mathcal{T}_{(321)}^{i}, \mathcal{T}_{(313)}^{i} = -\mathcal{T}_{(331)}^{i}, \mathcal{T}_{(323)}^{i} = -\mathcal{T}_{(332)}^{i}
+    \end{gathered}\label{eq:tensorcoeffinitial}
+    \end{equation}
+  \item[Second when $C_c$ at the desired position $C_{c^*}$] \hfill
+    \begin{equation}
+    \begin{gathered}
+      \tensor[^{c}]{R}{_{c^{*}}} = I, \ \tensor[^{c}]{t}{_{c^{*}}} = \bf{0}\\
+      \mathcal{T}_{(jkl)}^{*} = I_{(kj)} \ \tensor[^{i}]{t}{_{c^{*}(l)}}\\
+      \text{when } j \neq k, \mathcal{T}_{(jkl)}^{*} = 0\\
+      \mathcal{T}_{(111)}^{*} = \mathcal{T}_{(221)}^{*} = \mathcal{T}_{(331)}^{*} = \tensor[^{i}]{t}{_{c^{*}(1)}}\\
+      \mathcal{T}_{(112)}^{*} = \mathcal{T}_{(222)}^{*} = \mathcal{T}_{(332)}^{*} = \tensor[^{i}]{t}{_{c^{*}(2)}}\\
+      \mathcal{T}_{(113)}^{*} = \mathcal{T}_{(223)}^{*} = \mathcal{T}_{(333)}^{*} = \tensor[^{i}]{t}{_{c^{*}(3)}}
+    \end{gathered}\label{eq:tensorcoeffdesired}
+  \end{equation}
+\end{description}
+
+\subsection{Tensor Derivation}
+\label{sub:tensor_derivation}
+
+First, The derivatives of all the trifocal tensor elements with respect to time are generally as following:
+\begin{equation}
+  \dot{\mathcal{T}}_{(jkl)} = \tensor[^{c}]{\dot{R}}{_{c^{*}(kj)}} \ \tensor[^{i}]{t}{_{c^{*}(l)}} + \tensor[^{c}]{R}{_{c^{*}(kj)}} \ \tensor[^{i}]{\dot{t}}{_{c^{*}(l)}} - \tensor[^{c}]{\dot{t}}{_{c^{*}(k)}} \ \tensor[^{i}]{R}{_{c^{*}(lj)}} - \tensor[^{c}]{t}{_{c^{*}(k)}} \ \tensor[^{i}]{\dot{R}}{_{c^{*}(lj)}} \label{eq:tensorderivatives1}
+\end{equation}
+
+Since our initial camera $C_i$ is fixed, the elements of the derivatives of its rotation matrix and its transpose vector are equal to zero, \textit{i.e.:} $\tensor[^i]{\dot{t}}{_{c^{*}(l)}} = \tensor[^i]{\dot{R}}{_{c^{*}(jl)}} = 0$. Our trifocal tensor elements derivative is then simplified to:
+\begin{equation}
+  \dot{\mathcal{T}}_{(jkl)} = \tensor[^{c}]{\dot{R}}{_{c^{*}(kj)}} \ \tensor[^{i}]{t}{_{c^{*}(l)}} - \tensor[^{c}]{\dot{t}}{_{c^{*}(k)}} \ \tensor[^{i}]{R}{_{c^{*}(lj)}} \label{eq:tensorderivatives2}
+\end{equation}
+
+The spatial velocity of the camera is $u_c = {(v_c, \omega_{c})}^{T}$, where $v_c$ and $\omega_c$ are the translational and rotational velocities of the camera. From the geometry of the scene, we can deduce the following relationships:
+\begin{gather*}
+  {[\omega_{c}]}_{\times} = \tensor[^{c^*}]{R}{_{c}^{T}} \tensor[^{c^*}]{\dot{R}}{_{c}} = - \tensor[^{c^*}]{\dot{R}}{_{c}^{T}} \tensor[^{c^*}]{R}{_{c}}\\
+  \tensor[^{c^*}]{\dot{R}}{_{c}^{T}} = - {[\omega_{c}]}_{\times}\tensor[^{c^*}]{R}{_{c}^{T}}\\
+  \tensor[^{c^*}]{\dot{R}}{_{c}^{T}} = - {[\omega_{c}]}_{\times}\tensor[^{c}]{R}{_{c^*}}\\
+  \tensor[^{c}]{\dot{R}}{_{c^*}} = -{[\omega_c]}_{\times}\tensor[^{c}]{R}{_{c^*}}\\
+  %
+  \tensor[^{c^*}]{\dot{t}}{_{c}} = \tensor[^{c^*}]{R}{_{c}}v_{c}\\
+  \tensor[^{c}]{t}{_{c^*}} = - \tensor[^{c}]{R}{_{c^*}} \tensor[^{c^*}]{t}{_{c}}\\
+  \tensor[^{c}]{\dot{t}}{_{c^*}} = - \tensor[^{c}]{\dot{R}}{_{c^*}} \tensor[^{c^*}]{t}{_{c}} - \tensor[^{c}]{R}{_{c^*}} \tensor[^{c^*}]{\dot{t}}{_{c}}\\
+  \tensor[^{c}]{\dot{t}}{_{c^*}} = {[\omega_c]}_{\times}\tensor[^{c}]{R}{_{c^*}} \tensor[^{c^*}]{t}{_{c}} - \tensor[^{c}]{R}{_{c^*}} \tensor[^{c^*}]{R}{_{c}}v_{c}\\
+  \tensor[^{c}]{\dot{t}}{_{c^*}} = {[\omega_c]}_{\times}\tensor[^{c}]{t}{_{c^*}} - v_{c}\\
+  \tensor[^{c}]{\dot{t}}{_{c^*}} = {[\tensor[^{c}]{t}{_{c^*}}]}_{\times}\omega_c - v_{c}\\
+%
+  \tensor[^{c}]{\dot{t}}{_{c^{*}(k)}} = [-I | {[\tensor[^{c}]{t}{_{c^*}}]}_{\times}] u
+\end{gather*}
+
+Substituting back into the tensor derivation \eqref{eq:tensorderivatives2}, we get:
+\begin{equation}
+\begin{gathered}
+  \dot{\mathcal{T}}_{(jkl)} =  - {({[\omega_c]}_{\times}\tensor[^{c}]{R}{_{c^*}})}_{(kj)}\ \tensor[^{i}]{t}{_{c^*(l)}} - {({[\tensor[^{c}]{t}{_{c^*}}]}_{\times}\omega_c - v_{c})}_{(k)}\ \tensor[^{i}]{R}{_{c^*(lj)}}\\
+  \dot{\mathcal{T}}_{(jkl)} =  - (\sum_{m}{[\omega_{c}]}_{\times(km)}\tensor[^{c}]{R}{_{c^*(mj)}})\ \tensor[^{i}]{t}{_{c^*(l)}} - ({({[\tensor[^{c}]{t}{_{c^*}}]}_{\times}\omega_c)}_{(k)}  -   v_{c(k)})\ \tensor[^{i}]{R}{_{c^*(lj)}}
+\end{gathered}\label{eq:tensorderivatives3}
+\end{equation}
+
+where
+\begin{gather*}
+\tensor[^{i}]{t}{_{c^*}} = -\tensor[^{i}]{R}{_{c^*}}\begin{pmatrix} x_i \\ y_i \\ z_i \end{pmatrix}, \
+\tensor[^{c}]{t}{_{c^*}} = -\tensor[^{c}]{R}{_{c^*}}\begin{pmatrix} x_c \\ y_c \\ z_c \end{pmatrix}, \\
+  \tensor[^{i}]{R}{_{c^*}} = \begin{bmatrix}
+    R_{i(11)} & R_{i(12)} & R_{i(13)} \\
+    R_{i(21)} & R_{i(22)} & R_{i(23)} \\
+    R_{i(31)} & R_{i(32)} & R_{i(33)}
+  \end{bmatrix},\
+\tensor[^{c}]{R}{_{c^*}} = \begin{bmatrix}
+  R_{c(11)} & R_{c(12)} & R_{c(13)} \\
+  R_{c(21)} & R_{c(22)} & R_{c(23)} \\
+  R_{c(31)} & R_{c(32)} & R_{c(33)}
+\end{bmatrix},\\
+{[\omega_{c}]}_{\times} = \begin{bmatrix} 0 & -\omega_z & \omega_y \\ \omega_z & 0 & -\omega_y \\ -\omega_y & \omega_x & 0 \end{bmatrix},\
+{[\tensor[^{c}]{t}{_{c^*}}]}_{\times}\omega_c  = \begin{bmatrix} -\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z \\\ \ \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z \\ -\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}}\omega_y \end{bmatrix}
+\end{gather*}
+
+From~\eqref{eq:tensorcoeffsexpanded} and~\eqref{eq:tensorderivatives3}, the derivative of the first tensor coefficient can be computed as follows:
+\begin{equation}
+\begin{gathered}
+  \dot{\mathcal{T}}_{(111)} =  - (-R_{c(21)} \omega_z + R_{c(31)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(1)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z - v_x)\ \tensor[^{i}]{R}{_{c^*(11)}}\\
+  \dot{\mathcal{T}}_{(111)} = R_{i(11)}v_x - (R_{c(31)}\tensor[^{i}]{t}{_{c^*(1)}} - R_{i(11)}\tensor[^{c}]{t}{_{c^*(3)}}) \omega_y  + (R_{c(21)}\tensor[^{i}]{t}{_{c^*(1)}} - R_{i(11)}\tensor[^{c}]{t}{_{c^*(2)}} ) \omega_z\\
+  \dot{\mathcal{T}}_{(111)} = R_{i(11)}v_x - \mathcal{T}_{(131)} \omega_y  +  \mathcal{T}_{(121)} \omega_z
+\end{gathered}
+\end{equation}
+
+By expanding the derivatives for the rest of the coefficients, we can deduce this compact form for the tensor coefficients derivatives:
+\begin{equation}
+\begin{gathered}
+  \dot{\mathcal{T}}_{(jkl)} = R_{i(lj)}v_{c(k)} - \sum_{m} {[\omega_{c}]}_{\times(km)} \mathcal{T}_{(jml)}
+%%  \dot{\mathcal{T}}_{(111)} =  - (-R_{c(21)} \omega_z + R_{c(31)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(1)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(11)}}\\
+%%  \dot{\mathcal{T}}_{(112)} =  - (-R_{c(21)} \omega_z + R_{c(31)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(2)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(21)}}\\
+%%  \dot{\mathcal{T}}_{(113)} =  - (-R_{c(21)} \omega_z + R_{c(31)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(3)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(31)}}\\
+%%  %
+%%  \dot{\mathcal{T}}_{(121)} =  - ( R_{c(11)} \omega_z - R_{c(31)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(1)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(11)}}\\
+%%  \dot{\mathcal{T}}_{(122)} =  - ( R_{c(11)} \omega_z - R_{c(31)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(2)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(21)}}\\
+%%  \dot{\mathcal{T}}_{(123)} =  - ( R_{c(11)} \omega_z - R_{c(w1)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(3)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(31)}}\\
+%%  %
+%%  \dot{\mathcal{T}}_{(131)} =  - (-R_{c(11)} \omega_y + R_{c(21)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(1)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(11)}}\\
+%%  \dot{\mathcal{T}}_{(132)} =  - (-R_{c(11)} \omega_y + R_{c(21)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(2)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(21)}}\\
+%%  \dot{\mathcal{T}}_{(133)} =  - (-R_{c(11)} \omega_y + R_{c(21)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(3)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(31)}}\\
+%%  %
+%%  %
+%%  \dot{\mathcal{T}}_{(211)} =  - (-R_{c(22)} \omega_z + R_{c(32)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(1)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(12)}}\\
+%%  \dot{\mathcal{T}}_{(212)} =  - (-R_{c(22)} \omega_z + R_{c(32)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(2)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(22)}}\\
+%%  \dot{\mathcal{T}}_{(213)} =  - (-R_{c(22)} \omega_z + R_{c(32)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(3)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(32)}}\\
+%%  %
+%%  \dot{\mathcal{T}}_{(221)} =  - ( R_{c(12)} \omega_z - R_{c(32)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(1)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(12)}}\\
+%%  \dot{\mathcal{T}}_{(222)} =  - ( R_{c(12)} \omega_z - R_{c(32)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(2)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(22)}}\\
+%%  \dot{\mathcal{T}}_{(223)} =  - ( R_{c(12)} \omega_z - R_{c(w2)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(3)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(32)}}\\
+%%  %
+%%  \dot{\mathcal{T}}_{(231)} =  - (-R_{c(12)} \omega_y + R_{c(22)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(1)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(12)}}\\
+%%  \dot{\mathcal{T}}_{(232)} =  - (-R_{c(12)} \omega_y + R_{c(22)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(2)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(22)}}\\
+%%  \dot{\mathcal{T}}_{(233)} =  - (-R_{c(12)} \omega_y + R_{c(22)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(3)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(32)}}\\
+%%  %
+%%  %
+%%  \dot{\mathcal{T}}_{(311)} =  - (-R_{c(23)} \omega_z + R_{c(33)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(1)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(13)}}\\
+%%  \dot{\mathcal{T}}_{(312)} =  - (-R_{c(23)} \omega_z + R_{c(33)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(2)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(23)}}\\
+%%  \dot{\mathcal{T}}_{(313)} =  - (-R_{c(23)} \omega_z + R_{c(33)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(3)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(33)}}\\
+%%  %
+%%  \dot{\mathcal{T}}_{(321)} =  - ( R_{c(13)} \omega_z - R_{c(33)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(1)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(13)}}\\
+%%  \dot{\mathcal{T}}_{(322)} =  - ( R_{c(13)} \omega_z - R_{c(33)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(2)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(23)}}\\
+%%  \dot{\mathcal{T}}_{(323)} =  - ( R_{c(13)} \omega_z - R_{c(w3)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(3)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(33)}}\\
+%%  %
+%%  \dot{\mathcal{T}}_{(331)} =  - (-R_{c(13)} \omega_y + R_{c(23)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(1)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(13)}}\\
+%%  \dot{\mathcal{T}}_{(332)} =  - (-R_{c(13)} \omega_y + R_{c(23)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(2)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(23)}}\\
+%%  \dot{\mathcal{T}}_{(333)} =  - (-R_{c(13)} \omega_y + R_{c(23)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(3)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(33)}}\\
+\end{gathered}\label{eq:tensorderivativesgeneral}
+\end{equation}
+
+\subsection{Tensor Normalization}
+\label{sub:tensor_normalization}
+In this approach, no metric information, depth estimation or trifocal tensor decomposition were used. Hence, we need to define a common scale of the trifocal tensor for the control law. The trifocal tensor is normalized to get a fixed scale with $\mathcal{T}_{N}$. When the camera reaches the desired goal position, we can observe from~\eqref{eq:tensorcoeffdesired} that the tensor coefficients are only related to the translation of the camera at the initial position which is a constant value vector. Thus, the norm of the vector $\lVert \tensor[^{i}]{t}{_{c^*}} \rVert$ can be used as a normalization factor for the trifocal tensor. Then the normalized trifocal tensor coefficients are:
+\begin{equation}
+  \begin{gathered}
+    T_{jkl} = \frac{\mathcal{T}_{jkl}}{\mathcal{T}_{N}}\\
+    \mathcal{T}_{N} = \lVert \tensor[^{i}]{t}{_{c^*}} \rVert = \sqrt{{(\tensor[^{i}]{t}{_{c^*(1)}})}^{2}+{(\tensor[^{i}]{t}{_{c^*(1)}})}^{2}+{(\tensor[^{i}]{t}{_{c^*(3)}})}^{2}}
+  \end{gathered}\label{eq:tensornormalization}
+\end{equation}
+
+The use of the initial camera position is conveniant in visual servoing as the normalization factor $\mathcal{T}_{N}$ is never equal to zero except when the initial and desired camera positions are the same, which is not valid in our context. Also, this normalization factor is constant with time and doesn't affect the tensor derivatives. The trifocal tensor estimation is then computed relative to the initial camera position distance which can be estimated in the initialization step and used further for the control loop.
+
+\subsection{Interaction Matrix}
+\label{sub:interaction_matrix}
+To control the six degrees of freedom, at least six tensor coefficients are necessary. However, to avoid singularities, more than six tensor coefficients are considered. The interaction matrix taking into account all the tensor coefficients is given in~\eqref{eq:interactionmatrix}. It is important to notice that pose of the initial camera location is necessary for the computation of the interaction matrix as well as the normalization factor. This initial pose can be retrieved by computing the equivalent projection matrix for the estimated trifocal tensor as show in~\ref{sub:recovering_projection_matrices}. This step is done at the control loop initialization.
+
+\begin{equation}
+\begin{gathered}
+ L_{\mathcal{T}_{(jkl)}} = \frac{1}{\mathcal{T}_{N}}
+  \begin{bmatrix}
+      \tensor[^{i}]{R}{_{c^*(11)}} & 0 & 0 & 0 & - \mathcal{T}_{(131)} & \mathcal{T}_{(121)}\\
+      \tensor[^{i}]{R}{_{c^*(21)}} & 0 & 0 & 0 & - \mathcal{T}_{(132)} & \mathcal{T}_{(122)}\\
+      \tensor[^{i}]{R}{_{c^*(31)}} & 0 & 0 & 0 & - \mathcal{T}_{(133)} & \mathcal{T}_{(123)}\\
+
+      0 & \tensor[^{i}]{R}{_{c^*(11)}} & 0 & \mathcal{T}_{(131)} & 0 & - \mathcal{T}_{(111)}\\
+      0 & \tensor[^{i}]{R}{_{c^*(21)}} & 0 & \mathcal{T}_{(132)} & 0 & - \mathcal{T}_{(112)}\\
+      0 & \tensor[^{i}]{R}{_{c^*(31)}} & 0 & \mathcal{T}_{(133)} & 0 & - \mathcal{T}_{(113)}\\
+
+      0 & 0 & \tensor[^{i}]{R}{_{c^*(11)}} & - \mathcal{T}_{(121)} & \mathcal{T}_{(111)} & 0 \\
+      0 & 0 & \tensor[^{i}]{R}{_{c^*(21)}} & - \mathcal{T}_{(122)} & \mathcal{T}_{(112)} & 0 \\
+      0 & 0 & \tensor[^{i}]{R}{_{c^*(31)}} & - \mathcal{T}_{(123)} & \mathcal{T}_{(113)} & 0 \\
+
+
+      \tensor[^{i}]{R}{_{c^*(12)}} & 0 & 0 & 0 & - \mathcal{T}_{(231)} & \mathcal{T}_{(221)}\\
+      \tensor[^{i}]{R}{_{c^*(22)}} & 0 & 0 & 0 & - \mathcal{T}_{(232)} & \mathcal{T}_{(222)}\\
+      \tensor[^{i}]{R}{_{c^*(32)}} & 0 & 0 & 0 & - \mathcal{T}_{(233)} & \mathcal{T}_{(223)}\\
+
+      0 & \tensor[^{i}]{R}{_{c^*(12)}} & 0 & \mathcal{T}_{(231)} & 0 & - \mathcal{T}_{(211)}\\
+      0 & \tensor[^{i}]{R}{_{c^*(22)}} & 0 & \mathcal{T}_{(232)} & 0 & - \mathcal{T}_{(212)}\\
+      0 & \tensor[^{i}]{R}{_{c^*(32)}} & 0 & \mathcal{T}_{(233)} & 0 & - \mathcal{T}_{(213)}\\
+
+      0 & 0 & \tensor[^{i}]{R}{_{c^*(12)}} & - \mathcal{T}_{(221)} & \mathcal{T}_{(211)} & 0 \\
+      0 & 0 & \tensor[^{i}]{R}{_{c^*(22)}} & - \mathcal{T}_{(222)} & \mathcal{T}_{(212)} & 0 \\
+      0 & 0 & \tensor[^{i}]{R}{_{c^*(32)}} & - \mathcal{T}_{(223)} & \mathcal{T}_{(213)} & 0 \\
+
+
+      \tensor[^{i}]{R}{_{c^*(13)}} & 0 & 0 & 0 & - \mathcal{T}_{(331)} & \mathcal{T}_{(321)}\\
+      \tensor[^{i}]{R}{_{c^*(23)}} & 0 & 0 & 0 & - \mathcal{T}_{(332)} & \mathcal{T}_{(322)}\\
+      \tensor[^{i}]{R}{_{c^*(33)}} & 0 & 0 & 0 & - \mathcal{T}_{(333)} & \mathcal{T}_{(323)}\\
+
+      0 & \tensor[^{i}]{R}{_{c^*(13)}} & 0 & \mathcal{T}_{(331)} & 0 & - \mathcal{T}_{(311)}\\
+      0 & \tensor[^{i}]{R}{_{c^*(23)}} & 0 & \mathcal{T}_{(332)} & 0 & - \mathcal{T}_{(312)}\\
+      0 & \tensor[^{i}]{R}{_{c^*(33)}} & 0 & \mathcal{T}_{(333)} & 0 & - \mathcal{T}_{(313)}\\
+
+      0 & 0 & \tensor[^{i}]{R}{_{c^*(13)}} & - \mathcal{T}_{(321)} & \mathcal{T}_{(311)} & 0 \\
+      0 & 0 & \tensor[^{i}]{R}{_{c^*(23)}} & - \mathcal{T}_{(322)} & \mathcal{T}_{(312)} & 0 \\
+      0 & 0 & \tensor[^{i}]{R}{_{c^*(33)}} & - \mathcal{T}_{(323)} & \mathcal{T}_{(313)} & 0
+  \end{bmatrix}
+\end{gathered}\label{eq:interactionmatrix}
+\end{equation}

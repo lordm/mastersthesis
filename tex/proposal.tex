@@ -1,0 +1,19 @@
+\textbf{Title:}\\
+Visual Servoing Using Trifocal Tensor
+
+\textbf{Description:}\\
+Visual servoing is an approach for controling the motion of a robotic system from visual measurements. Many works have been realized in the past in this area, and is mainly divided into two main categories: Image-based, and Pose-based Visual Servoing. The trifocal tensor is well known in computer vision for tracing geometric information from three images of the same scene. The purpose of this thesis is to design an uncalibrated visual servoing method of a 6-DOF mainpulator or robot based on the three-view projective geometry properties. Few studies where conducted on this work but they didn't provide a generic analytical solutions for 6-DOF robots. This method differs than the two main visual servoing approaches as the control loop is closed over projective measures, which are the trifocal tensor elements. These projective measures are found directly from images across three views, without explicitly recovering the camera pose or directly closing the loop in the image space. The trifocal tensor geometric model is more robust than the two view geometry models as it involves the information given by a third view, and the set of correspondences obtained is more robust to outliers.
+
+\textbf{Aims:}\\
+\begin{itemize}
+  \item Design a visual control method with a generic analytical form using the trifocal tensor geometry.
+  \item Apply the obtained results in simulations and experimental validations on a 6-DOF robot arm.
+\end{itemize}
+
+\textbf{Tasks:}\\
+\begin{itemize}
+\item Research the state of the art work on using the trifocal tensor in visual servoing.
+\item Derive an analytical form for using the trifocal tensor in the visual control loop.
+\item Implement the method in C++ using ViSP software library.
+\item Experiment the method on different robots configurations.
+\end{itemize}

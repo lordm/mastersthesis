@@ -15,8 +15,9 @@
 \usepackage{tensor}
 
 \providecommand{\e}[1]{\ensuremath{10^{#1}}}
+\allowdisplaybreaks%%%
 
-\title{Three-View Geometry}
+\title{Visual Servoing using Trifocal Tensor}
 \author{Marwan \textsc{Osman}}
 \date{}
 
@@ -24,9 +25,16 @@
 
 \maketitle
 
-\input{tex/tensor_notation}
-\input{tex/trifocal_tensor}
+\tableofcontents
+\newpage
 
+%\input{tex/proposal}
+%\input{tex/tensorerror}
+\input{tex/introduction}
+\input{tex/trifocal_tensor}
+\input{tex/control_law}
+
+\newpage
 \bibliographystyle{IEEEtran}
 \nocite{*}
 \bibliography{tex/refs}

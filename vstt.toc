@@ -1,0 +1,10 @@
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}
+\contentsline {section}{\numberline {2}Trifocal Tensor}{2}{section.2}
+\contentsline {subsection}{\numberline {2.1}Tensor Notation}{2}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Three-View Geometry}{3}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Recovering Projection Matrices}{6}{subsection.2.3}
+\contentsline {section}{\numberline {3}Control Law}{7}{section.3}
+\contentsline {subsection}{\numberline {3.1}Coefficients of the Trifocal Tensor}{7}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Tensor Derivation}{9}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Tensor Normalization}{11}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Interaction Matrix}{11}{subsection.3.4}

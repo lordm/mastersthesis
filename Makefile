@@ -8,4 +8,4 @@ thesis:
 	pdflatex thesis.tex
 
 report:
-	pdflatex trifocalgeometry.tex
+	pdflatex vstt.tex
