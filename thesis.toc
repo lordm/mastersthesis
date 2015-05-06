@@ -1,0 +1,14 @@
+\contentsline {chapter}{\numberline {Acknowledgments\hspace {-96pt}}}{iv}{chapter*.4}
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Problem Definition}{1}{section.1.1}
+\contentsline {section}{\numberline {1.2}Objectives}{1}{section.1.2}
+\contentsline {section}{\numberline {1.3}Document Organization}{1}{section.1.3}
+\contentsline {chapter}{\numberline {2}Background}{3}{chapter.2}
+\contentsline {section}{\numberline {2.1}Trifocal Tensor}{3}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}Tensor Notation}{3}{subsection.2.1.1}
+\contentsline {subsection}{\numberline {2.1.2}Three-View Geometry}{4}{subsection.2.1.2}
+\contentsline {subsection}{\numberline {2.1.3}Recovering Projection Matrices}{8}{subsection.2.1.3}
+\contentsline {section}{\numberline {2.2}Visual Servoing}{8}{section.2.2}
+\contentsline {section}{\numberline {2.3}Previous Works}{8}{section.2.3}
+\contentsline {chapter}{\numberline {A}The first appendix}{9}{appendix.A}
+\contentsline {chapter}{\numberline {Bibliography\hspace {-96pt}}}{10}{appendix*.7}

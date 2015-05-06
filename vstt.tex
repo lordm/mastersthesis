@@ -11,11 +11,13 @@
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage[bookmarks=true,pdfborder={0 0 0}]{hyperref}
-\usepackage{subcaption}
+\usepackage{subfig}
 \usepackage{tensor}
+\usepackage{lscape}
 
 \providecommand{\e}[1]{\ensuremath{10^{#1}}}
 \allowdisplaybreaks%%%
+\newcommand\scalemath[2]{\scalebox{#1}{\mbox{\ensuremath{\displaystyle #2}}}}
 
 \title{Visual Servoing using Trifocal Tensor}
 \author{Marwan \textsc{Osman}}
@@ -23,20 +25,22 @@
 
 \begin{document}
 
-\maketitle
+%\maketitle
 
 \tableofcontents
 \newpage
 
+%\input{tex/analytical2}
+\input{tex/analytical3}
 %\input{tex/proposal}
 %\input{tex/tensorerror}
-\input{tex/introduction}
-\input{tex/trifocal_tensor}
-\input{tex/control_law}
+%\input{tex/introduction}
+%\input{tex/trifocal_tensor}
+%\input{tex/control_law}
 
-\newpage
-\bibliographystyle{IEEEtran}
-\nocite{*}
-\bibliography{tex/refs}
+%\newpage
+%\bibliographystyle{IEEEtran}
+%\nocite{*}
+%\bibliography{tex/refs}
 
 \end{document}
