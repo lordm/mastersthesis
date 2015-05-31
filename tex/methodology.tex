@@ -1,0 +1,20 @@
+\chapter{Methodology} \label{chap:methodology}
+
+In this chapter, we present the development of a visual servoing method based on using the trifocal tensor elements as visual features in our visual servoing control loop. We begin by developing the needed control law using the tensor, finding the respective interaction matrix, and then exploring the normalization approach for the obtained tensor and interaction matrix. Finally we represent the overall procedure for the proposed algorithm to be implemented.
+
+\input{tex/control_law}
+\clearpage
+
+\newpage
+\section{Proposed Method}
+We have defined all the elements of the control law \eqref{eq:tensorcontrollaw}. The interaction matrix $L_{T_{(jkl)}}$ is computed as indicated in \eqref{eq:interactionmatrixnormalized}. The error $e$ is computed using the difference between the current tensor coefficients and the desired tensor coefficients, $e = T_{(jkl)} - T_{(jkl)}^{*}$.
+
+\begin{figure}[ht!]
+  \includegraphics[width=150mm,height=70mm]{figures/vsttloop.png}
+  \caption{Block diagram of the proposed Trifocal Tensor Visual Servoing loop control}
+  \label{fig:vsttloop}
+\end{figure}
+
+In Figure~\ref{fig:vsttloop}, we present the block diagram explaining the proposed trifocal tensor visual servoing control loop. At initialization, the desired tensor $T_{(jkl)}^{*}$ is computed from feature correspondences across three images obtained from the three camera poses: initial pose, desired pose, and current pose being equal to the desired pose. In this method, we assume the camera intrinsic parameters are known. It means before computing the tensor from image correspondences, matching points have to be transformed to calibrated coordinates.
+
+The current tensor $T_{(jkl)}$ is computed inside the visual servoing loop at each iteration. Then the interaction matrix is computed using the current tensor. For simplicity, we make the assumption that the initial pose is known and the interaction matrix can be computed directly. The new error value is computed along with the pseudo-inverse of the interaction matrix and fed back to the control law to compute the required velocities to drive the camera to the desired pose. The system converges and the loop is terminated when the camera reaches the desired pose. This is evaluated when the sum squared of the error reaches a value less than a defined threshold, $1 \times \e{-6}$ for example.

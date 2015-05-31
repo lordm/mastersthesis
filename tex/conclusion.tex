@@ -1,0 +1,21 @@
+\chapter{Conclusion and Future Work} \label{chap:conclusion}
+
+\section{Conclusion}
+Visual Servoing is a growing active field of research. Recent advances in robotics and computer vision domains has led to the emergence of this vision-based closed loop control methods to control a robot manipulator or a mobile robot through vision acquired by a camera. Many works have studied closing the control loop over visual features computed either from the image space or the estimated 3D pose of the scene. Few works studied using stereo-vision geometry, and up until recently only a couple of works studied using the trifocal tensor into the visual servoing control loop.
+
+An approach to incorporate the trifocal tensor estimated from the three-views geometry into the visual servoing control loop task has been presented in this work. This approach presents a generalized 6-DOF visual servoing task, with the control loop being closed over projective measures, namely the trifocal tensor coefficients. To the best of our knowledge, this approach is the first to propose a fully analytical design for a visual servoing task based on the trifocal tensor. Previous works either provided an analytical approach for a 3-DOF non-holonomic mobile robot, or provided a full 6-DOF approach but with an interaction matrix estimated numerically rather than analytically.
+
+The experiments showed that this approach is working practically with very satisfactory results. In addition, this approach does not suffer from some of the problems existing in IBVS methods as like the retreat problem.
+
+\section{Future Work}\label{sec:futurework}
+\subsection{Using A Subset of the Trifocal Tensor Coefficients}
+As presented in \ref{chap:results}, it was found that using all the trifocal tensor coefficients inside the visual servoing loop does not produce the best results in terms of perfectly exponentially decreasing tensor error values. Thus, an automatic optimality selection criteria is needed to dynamically choose the most relevant tensor coefficients. For example, the singular value decomposition of the interaction matrix can reveal which degrees of freedom are most apparent. By selecting features and designing controllers that maximize these measures, the performance of the visual servoing system can be improved. These concepts has been discussed in details in \cite{chaumette2007visual}, \cite{538976} and \cite{611333}.
+\vspace{-1em}
+\subsection{Stability Analysis}
+Simulation and practical experiments are not enough for judging the proposed method. We need to prove the existence of only one equilibrium state at the desired pose location. The analysis of the control law can be studied using Lyapunov stability analysis method \cite{spong2006robot}.
+\vspace{-1em}
+\subsection{Estimating The Initial Pose}
+We observe in \eqref{eq:interactionmatrixnormalized} that the interaction matrix depends on the knowledge of the initial camera pose. In our experiments, we made an assumption that the initial pose is known from the setup of the simulation. Practically, this information might not be available, and the initial pose needs to be estimated. The initial pose can be retrieved by computing the equivalent projection matrix for the estimated trifocal tensor as shown in~\ref{sub:recovering_projection_matrices}. However, one potential issue is that the estimation will be up to a scale value and not the real value. This scale problem needs to be addressed properly during the tensor normalization step to avoid the scale effects on computing the correct values for the interaction matrix.
+\vspace{-1em}
+\subsection{Uncalibrated Camera}
+The current method assumes the cameras have already been calibrated before-hand. Practically, this may not be the case, so we need to extend the method to cover partially or totally uncalibrated cameras. The introduction of the camera intrinsic parameters matrix $K$ into the formulas, will affect the obtained tensor computation, and hence, the corresponding interaction matrix.

@@ -1,35 +1,41 @@
 \section{Control Law}
-To formulate the control law of the trifocal tensor based visual servoing, we need to establish the model of the system and find the relation between the input of the control and the trifocal tensor coefficients. The trifocal tensor can be computed from feature correspondences across the three views. Our goal is to find the interaction matrix relating the control input and the tensor derivatives.
+To formulate the control law of the trifocal tensor based visual servoing \eqref{eq:tensorcontrollaw}, we need to establish the model of the system and find the relation between the input of the control and the trifocal tensor coefficients. First, we need to find the interaction matrix relating the control input and the tensor derivatives. The error will be the difference between the current tensor and the desired tensor values.
+
 \begin{equation}
-  \dot{\mathcal{T}}_{(jkl)} = L_{\mathcal{T}_{(jkl)}} \begin{pmatrix} v_c \\ w_c \end{pmatrix}
+  \begin{gathered}
+  \dot{\mathcal{T}}_{(jkl)} = L_{\mathcal{T}_{(jkl)}} \begin{pmatrix} v_c \\ w_c \end{pmatrix}\\
+  u_c = -\lambda L_{\mathcal{T}_{(jkl)}}^{+} e
+\end{gathered} \label{eq:tensorcontrollaw}
 \end{equation}
 
 \subsection{Coefficients of the Trifocal Tensor}
 To compute the relation between the coefficients of the trifocal tensor and the Projective matrices, first we write the Tensor relation \eqref{eq:trifocalgeometry1} with the proper visual servoing notation as follows
+
 \begin{equation}
   \mathcal{T}_{(jkl)} = a_{(kj)}b_{(4l)} - a_{(4k)}b_{(lj)} \label{eq:tensorrelation}
 \end{equation}
 
 For the sake of maintaining the Visual Servoing convention, we omit the use of $i$ as an index for the tensor relation. The letter $i$ further on will be indicating the initial view in the control system. The Camera positions are then written as $C_{c^*},C_c,C_i$ for the desired, current, and initial camera positions respectively. The same may also be done for the projection matrices, and instead of using the matrices $A,B$ to express the homography between the first and second or third views, we will use the standard notation from Visual Servoing with the corresponding Rotation matrices $^{c}R_{c^*}, ^{i}R_{c^*}$ respectively. For the translations $a_4, b_4$, we will use $^{c}{t}_{c^*}, ^{i}{t}_{c^*}$ respectively. Leading superscripts will denote the frame with respect to which a set of coordinates are defined. Thus, the rotation matrix $^{c}R_{c^*}$ gives the orientation of the desired camera frame relative to the current camera frame.
-
 \begin{align*}
   C &\Rightarrow C_{c^*} \text{  Desired camera position} \\
   C' &\Rightarrow C_c \text{  Current camera position} \\
   C^{''} &\Rightarrow C_i \text{  Initial camera position} \\
 \end{align*}
+\vspace*{-1.5cm}
 \begin{gather*}
   P_d = P = [I | 0]\\
   P_c = P^{\prime} = [A | a_4] : ^{c}{\bf M}_{c^*} = [ ^{c}{\bf R}_{c^*} | ^{c}{\bf t}_{c^*} ]\\
   P_i = P^{\prime \prime} = [B | b_4] : ^{i}{\bf M}_{c^*} = [ ^{i}{\bf R}_{c^*} | ^{i}{\bf t}_{c^*} ]
 \end{gather*}
-
 The Tensor relation \eqref{eq:tensorrelation} can then be expressed as follows
+
 \begin{equation}
 \mathcal{T}_{(jkl)} = \tensor[^{c}]{R}{_{c^{*}(kj)}} \ \tensor[^{i}]{t}{_{c^{*}(l)}} - \tensor[^{c}]{t}{_{c^{*}(k)}} \ \tensor[^{i}]{R}{_{c^{*}(lj)}} \label{eq:tensorcoeffs}
 \end{equation}
 
 Expanding this relation further to compute the tensor coefficients is straight forward, expanding for values of $j,k,l$ we get the following tensor coefficients:
 
+\clearpage
 \begin{equation}
 \begin{gathered}
   \mathcal{T}_{(111)} = \tensor[^{c}]{R}{_{c^{*}(11)}} \ \tensor[^{i}]{t}{_{c^{*}(1)}} - \tensor[^{c}]{t}{_{c^{*}(1)}} \ \tensor[^{i}]{R}{_{c^{*}(11)}}\\
@@ -94,11 +100,13 @@ Our objective is to move our robot from the initial camera position to the desir
 \label{sub:tensor_derivation}
 
 First, The derivatives of all the trifocal tensor elements with respect to time are generally as following:
+
 \begin{equation}
   \dot{\mathcal{T}}_{(jkl)} = \tensor[^{c}]{\dot{R}}{_{c^{*}(kj)}} \ \tensor[^{i}]{t}{_{c^{*}(l)}} + \tensor[^{c}]{R}{_{c^{*}(kj)}} \ \tensor[^{i}]{\dot{t}}{_{c^{*}(l)}} - \tensor[^{c}]{\dot{t}}{_{c^{*}(k)}} \ \tensor[^{i}]{R}{_{c^{*}(lj)}} - \tensor[^{c}]{t}{_{c^{*}(k)}} \ \tensor[^{i}]{\dot{R}}{_{c^{*}(lj)}} \label{eq:tensorderivatives1}
 \end{equation}
 
 Since our initial camera $C_i$ is fixed, the elements of the derivatives of its rotation matrix and its transpose vector are equal to zero, \textit{i.e.:} $\tensor[^i]{\dot{t}}{_{c^{*}(l)}} = \tensor[^i]{\dot{R}}{_{c^{*}(jl)}} = 0$. Our trifocal tensor elements derivative is then simplified to:
+
 \begin{equation}
   \dot{\mathcal{T}}_{(jkl)} = \tensor[^{c}]{\dot{R}}{_{c^{*}(kj)}} \ \tensor[^{i}]{t}{_{c^{*}(l)}} - \tensor[^{c}]{\dot{t}}{_{c^{*}(k)}} \ \tensor[^{i}]{R}{_{c^{*}(lj)}} \label{eq:tensorderivatives2}
 \end{equation}
@@ -110,8 +118,8 @@ The spatial velocity of the camera is $u_c = {(v_c, \omega_{c})}^{T}$, where $v_
   \tensor[^{c^*}]{\dot{R}}{_{c}^{T}} = - {[\omega_{c}]}_{\times}\tensor[^{c}]{R}{_{c^*}}\\
   \tensor[^{c}]{\dot{R}}{_{c^*}} = -{[\omega_c]}_{\times}\tensor[^{c}]{R}{_{c^*}}\\
   %
-  \tensor[^{c^*}]{\dot{t}}{_{c}} = \tensor[^{c^*}]{R}{_{c}}v_{c}\\
-  \tensor[^{c}]{t}{_{c^*}} = - \tensor[^{c}]{R}{_{c^*}} \tensor[^{c^*}]{t}{_{c}}\\
+  \text{and}\\
+  \tensor[^{c^*}]{\dot{t}}{_{c}} = \tensor[^{c^*}]{R}{_{c}}v_{c}, \tensor[^{c}]{t}{_{c^*}} = - \tensor[^{c}]{R}{_{c^*}} \tensor[^{c^*}]{t}{_{c}}\\
   \tensor[^{c}]{\dot{t}}{_{c^*}} = - \tensor[^{c}]{\dot{R}}{_{c^*}} \tensor[^{c^*}]{t}{_{c}} - \tensor[^{c}]{R}{_{c^*}} \tensor[^{c^*}]{\dot{t}}{_{c}}\\
   \tensor[^{c}]{\dot{t}}{_{c^*}} = {[\omega_c]}_{\times}\tensor[^{c}]{R}{_{c^*}} \tensor[^{c^*}]{t}{_{c}} - \tensor[^{c}]{R}{_{c^*}} \tensor[^{c^*}]{R}{_{c}}v_{c}\\
   \tensor[^{c}]{\dot{t}}{_{c^*}} = {[\omega_c]}_{\times}\tensor[^{c}]{t}{_{c^*}} - v_{c}\\
@@ -121,6 +129,7 @@ The spatial velocity of the camera is $u_c = {(v_c, \omega_{c})}^{T}$, where $v_
 \end{gather*}
 
 Substituting back into the tensor derivation \eqref{eq:tensorderivatives2}, we get:
+
 \begin{equation}
 \begin{gathered}
   \dot{\mathcal{T}}_{(jkl)} =  - {({[\omega_c]}_{\times}\tensor[^{c}]{R}{_{c^*}})}_{(kj)}\ \tensor[^{i}]{t}{_{c^*(l)}} - {({[\tensor[^{c}]{t}{_{c^*}}]}_{\times}\omega_c - v_{c})}_{(k)}\ \tensor[^{i}]{R}{_{c^*(lj)}}\\
@@ -129,6 +138,7 @@ Substituting back into the tensor derivation \eqref{eq:tensorderivatives2}, we g
 \end{equation}
 
 where
+
 \begin{gather*}
 \tensor[^{i}]{t}{_{c^*}} = -\tensor[^{i}]{R}{_{c^*}}\begin{pmatrix} x_i \\ y_i \\ z_i \end{pmatrix}, \
 \tensor[^{c}]{t}{_{c^*}} = -\tensor[^{c}]{R}{_{c^*}}\begin{pmatrix} x_c \\ y_c \\ z_c \end{pmatrix}, \\
@@ -142,7 +152,7 @@ where
   R_{c(21)} & R_{c(22)} & R_{c(23)} \\
   R_{c(31)} & R_{c(32)} & R_{c(33)}
 \end{bmatrix},\\
-{[\omega_{c}]}_{\times} = \begin{bmatrix} 0 & -\omega_z & \omega_y \\ \omega_z & 0 & -\omega_y \\ -\omega_y & \omega_x & 0 \end{bmatrix},\
+{[\omega_{c}]}_{\times} = \begin{bmatrix} 0 & -\omega_z & \omega_y \\ \omega_z & 0 & -\omega_x \\ -\omega_y & \omega_x & 0 \end{bmatrix},\
 {[\tensor[^{c}]{t}{_{c^*}}]}_{\times}\omega_c  = \begin{bmatrix} -\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z \\\ \ \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z \\ -\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}}\omega_y \end{bmatrix}
 \end{gather*}
 
@@ -156,53 +166,18 @@ From~\eqref{eq:tensorcoeffsexpanded} and~\eqref{eq:tensorderivatives3}, the deri
 \end{equation}
 
 By expanding the derivatives for the rest of the coefficients, we can deduce this compact form for the tensor coefficients derivatives:
+
 \begin{equation}
-\begin{gathered}
   \dot{\mathcal{T}}_{(jkl)} = R_{i(lj)}v_{c(k)} - \sum_{m} {[\omega_{c}]}_{\times(km)} \mathcal{T}_{(jml)}
-%%  \dot{\mathcal{T}}_{(111)} =  - (-R_{c(21)} \omega_z + R_{c(31)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(1)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(11)}}\\
-%%  \dot{\mathcal{T}}_{(112)} =  - (-R_{c(21)} \omega_z + R_{c(31)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(2)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(21)}}\\
-%%  \dot{\mathcal{T}}_{(113)} =  - (-R_{c(21)} \omega_z + R_{c(31)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(3)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(31)}}\\
-%%  %
-%%  \dot{\mathcal{T}}_{(121)} =  - ( R_{c(11)} \omega_z - R_{c(31)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(1)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(11)}}\\
-%%  \dot{\mathcal{T}}_{(122)} =  - ( R_{c(11)} \omega_z - R_{c(31)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(2)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(21)}}\\
-%%  \dot{\mathcal{T}}_{(123)} =  - ( R_{c(11)} \omega_z - R_{c(w1)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(3)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(31)}}\\
-%%  %
-%%  \dot{\mathcal{T}}_{(131)} =  - (-R_{c(11)} \omega_y + R_{c(21)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(1)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(11)}}\\
-%%  \dot{\mathcal{T}}_{(132)} =  - (-R_{c(11)} \omega_y + R_{c(21)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(2)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(21)}}\\
-%%  \dot{\mathcal{T}}_{(133)} =  - (-R_{c(11)} \omega_y + R_{c(21)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(3)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(31)}}\\
-%%  %
-%%  %
-%%  \dot{\mathcal{T}}_{(211)} =  - (-R_{c(22)} \omega_z + R_{c(32)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(1)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(12)}}\\
-%%  \dot{\mathcal{T}}_{(212)} =  - (-R_{c(22)} \omega_z + R_{c(32)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(2)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(22)}}\\
-%%  \dot{\mathcal{T}}_{(213)} =  - (-R_{c(22)} \omega_z + R_{c(32)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(3)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(32)}}\\
-%%  %
-%%  \dot{\mathcal{T}}_{(221)} =  - ( R_{c(12)} \omega_z - R_{c(32)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(1)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(12)}}\\
-%%  \dot{\mathcal{T}}_{(222)} =  - ( R_{c(12)} \omega_z - R_{c(32)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(2)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(22)}}\\
-%%  \dot{\mathcal{T}}_{(223)} =  - ( R_{c(12)} \omega_z - R_{c(w2)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(3)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(32)}}\\
-%%  %
-%%  \dot{\mathcal{T}}_{(231)} =  - (-R_{c(12)} \omega_y + R_{c(22)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(1)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(12)}}\\
-%%  \dot{\mathcal{T}}_{(232)} =  - (-R_{c(12)} \omega_y + R_{c(22)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(2)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(22)}}\\
-%%  \dot{\mathcal{T}}_{(233)} =  - (-R_{c(12)} \omega_y + R_{c(22)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(3)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(32)}}\\
-%%  %
-%%  %
-%%  \dot{\mathcal{T}}_{(311)} =  - (-R_{c(23)} \omega_z + R_{c(33)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(1)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(13)}}\\
-%%  \dot{\mathcal{T}}_{(312)} =  - (-R_{c(23)} \omega_z + R_{c(33)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(2)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(23)}}\\
-%%  \dot{\mathcal{T}}_{(313)} =  - (-R_{c(23)} \omega_z + R_{c(33)}\omega_y)\ \tensor[^{i}]{t}{_{c^*(3)}} - (-\tensor[^{c}]{t}{_{c^*(3)}}\omega_y + \tensor[^{c}]{t}{_{c^*(2)}} \omega_z -v_x)\ \tensor[^{i}]{R}{_{c^*(33)}}\\
-%%  %
-%%  \dot{\mathcal{T}}_{(321)} =  - ( R_{c(13)} \omega_z - R_{c(33)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(1)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(13)}}\\
-%%  \dot{\mathcal{T}}_{(322)} =  - ( R_{c(13)} \omega_z - R_{c(33)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(2)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(23)}}\\
-%%  \dot{\mathcal{T}}_{(323)} =  - ( R_{c(13)} \omega_z - R_{c(w3)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(3)}} - ( \tensor[^{c}]{t}{_{c^*(3)}}\omega_x - \tensor[^{c}]{t}{_{c^*(1)}} \omega_z -v_y)\ \tensor[^{i}]{R}{_{c^*(33)}}\\
-%%  %
-%%  \dot{\mathcal{T}}_{(331)} =  - (-R_{c(13)} \omega_y + R_{c(23)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(1)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(13)}}\\
-%%  \dot{\mathcal{T}}_{(332)} =  - (-R_{c(13)} \omega_y + R_{c(23)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(2)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(23)}}\\
-%%  \dot{\mathcal{T}}_{(333)} =  - (-R_{c(13)} \omega_y + R_{c(23)}\omega_x)\ \tensor[^{i}]{t}{_{c^*(3)}} - (-\tensor[^{c}]{t}{_{c^*(2)}}\omega_x + \tensor[^{c}]{t}{_{c^*(1)}} \omega_y -v_z)\ \tensor[^{i}]{R}{_{c^*(33)}}\\
-\end{gathered}\label{eq:tensorderivativesgeneral}
+\label{eq:tensorderivativesgeneral}
 \end{equation}
 
-\subsection{Interaction Matrix}
-\label{sub:interaction_matrix}
-To control the six degrees of freedom, at least six tensor coefficients are necessary. However, to avoid singularities, more than six tensor coefficients are considered. The interaction matrix taking into account all the tensor coefficients is given in~\eqref{eq:interactionmatrix}. It is important to notice that pose of the initial camera location is necessary for the computation of the interaction matrix as well as the normalization factor. This initial pose can be retrieved by computing the equivalent projection matrix for the estimated trifocal tensor as show in~\ref{sub:recovering_projection_matrices}. This step is done at the control loop initialization.
+\subsection{Interaction Matrix} \label{sub:interaction_matrix}
+To control the six degrees of freedom, at least six tensor coefficients are necessary. However, to avoid singularities, more than six tensor coefficients are considered. The interaction matrix taking into account all the tensor coefficients can be deduced from \eqref{eq:tensorderivativesgeneral}, and is given in~\eqref{eq:interactionmatrix}. It is important to notice that pose of the initial camera location is necessary for the computation of the interaction matrix as well as the normalization factor.
 
+It is also to be noticed there exists a decoupling between the translational velocities in the resulting interaction matrix. This decoupling ensures to obtain smooth camera trajectories for the motion in the 3D space.
+
+\clearpage
 \begin{equation}
 \begin{gathered}
  L_{\mathcal{T}_{(jkl)}} = %\frac{1}{\mathcal{T}_{N}}
@@ -247,8 +222,9 @@ To control the six degrees of freedom, at least six tensor coefficients are nece
   \end{bmatrix}
 \end{gathered}\label{eq:interactionmatrix}
 \end{equation}
+\clearpage
 
-When the camera reach the desired position, the interaction matrix is as follows:
+When the camera reach the desired position, the resulting interaction matrix is given in\eqref{eq:interactionmatrixdesired}. We can observe this interaction matrix only depends on the initial camera pose. This implies that the interaction matrix will never have all elements equal to zero (except for the diagonal elements of the rotation matrix $\tensor[^{i}]{R}{_{c^*}}$ which are equal to 1), except when the initial camera pose is exactly the same as the desired camera pose, which is not a valid configuration in our visual servoing framework.
 \begin{equation}
 \begin{gathered}
   L_{\mathcal{T}^{*}_{(jkl)}} = %\frac{1}{\mathcal{T}_{N}}
@@ -293,113 +269,140 @@ When the camera reach the desired position, the interaction matrix is as follows
   \end{bmatrix}
 \end{gathered}\label{eq:interactionmatrixdesired}
 \end{equation}
-\subsection{Tensor Normalization}
+
+\clearpage
+\newpage
+\section{Tensor Normalization}
 \label{sub:tensor_normalization}
 In this approach, no metric information, depth estimation or trifocal tensor decomposition were used. Hence, we need to define a common scale of the trifocal tensor for the control law. The trifocal tensor is normalized to get a fixed scale with $\mathcal{T}_{N}$. When the camera reaches the desired goal position, we can observe from~\eqref{eq:tensorcoeffdesired} that the tensor coefficients are only related to the translation of the camera at the initial position which is a constant value vector. Also from~\eqref{eq:interactionmatrix}, the first column elements $\mathcal{T}_{(111)}$, $\mathcal{T}_{(112)}$, $\mathcal{T}_{(113)}$, $\mathcal{T}_{(211)}$, $\mathcal{T}_{(212)}$, $\mathcal{T}_{(213)}$, $\mathcal{T}_{(311)}$, $\mathcal{T}_{(312)}$, $\mathcal{T}_{(313)}$ are respectively equal to $\tensor[^{i}]{t}{_{c^*(1)}}$, $\tensor[^{i}]{t}{_{c^*(2)}}$, $\tensor[^{i}]{t}{_{c^*(3)}}$, $0$,$0$,$0$,$0$,$0$,$0$ at the desired goal position.
 
-Choosing the elements $\mathcal{T}_{(111)}$, $\mathcal{T}_{(112)}$, $\mathcal{T}_{(113)}$ as normalization factor, we can normalize the elements $T_{jkl}$ for $k = 1$ as follows:
-
-%Thus, the norm of the vector $\lVert \tensor[^{i}]{t}{_{c^*}} \rVert$ can be used as a normalization factor for the trifocal tensor. Then the normalized trifocal tensor coefficients are:
+Choosing the elements $\mathcal{T}_{(111)}$, $\mathcal{T}_{(112)}$, $\mathcal{T}_{(113)}$ as normalization factors would seem a good choice for our method, as we would be interested in coefficients converging to non-zero values. However, it was found that for some scene configurations, these three coefficients could have values equal to zero at the initial pose. Which means at normalization step, this would cause dividing by a zero value. To avoid this problem, we will use all the nine coefficients of the first column to be our first normalization factor. We can then normalize the elements $T_{jkl}$ for $k = 1$ as follows:
 \begin{equation}
   \begin{gathered}
     T_{jkl} = \frac{\mathcal{T}_{jkl}}{\mathcal{T}_{1N}}\\
-    \mathcal{T}_{1N} = \sqrt{{\mathcal{T}_{111}}^{2}+{\mathcal{T}_{112}}^{2}+{\mathcal{T}_{113}}^{2}}\\
-    \dot{\mathcal{T}}_{1N} = \frac{1}{\sqrt{{\mathcal{T}_{111}}^{2}+{\mathcal{T}_{112}}^{2}+{\mathcal{T}_{113}}^{2}}}(\mathcal{T}_{111}\dot{\mathcal{T}}_{111} + \mathcal{T}_{112}\dot{\mathcal{T}}_{112} + \mathcal{T}_{113}\dot{\mathcal{T}}_{113})\\
-    \dot{\mathcal{T}}_{1N} = \frac{1}{\mathcal{T}_{N}}(\mathcal{T}_{111}\dot{\mathcal{T}}_{111} + \mathcal{T}_{112}\dot{\mathcal{T}}_{112} + \mathcal{T}_{113}\dot{\mathcal{T}}_{113})\\
-    \dot{\mathcal{T}}_{1N} = \frac{1}{\mathcal{T}_{N}}(\mathcal{T}_{111}(R_{i(11)} v_x - \mathcal{T}_{131} \omega_y + \mathcal{T}_{121} \omega_z) \\+ \mathcal{T}_{112}(R_{i(21)} v_x - \mathcal{T}_{132} \omega_y + \mathcal{T}_{122} \omega_z) + \mathcal{T}_{113}(R_{i(31)} v_x - \mathcal{T}_{133} \omega_y + \mathcal{T}_{123} \omega_z))\\
-  \dot{\mathcal{T}}_{1N} = \begin{bmatrix}T_{111}R_{i(11)} + T_{112}R_{i(21)} + T_{113}R_{i(31)} \\ 0 \\ 0 \\ 0 \\ -T_{111}\mathcal{T}_{131} - T_{112}\mathcal{T}_{132} - T_{113}\mathcal{T}_{133} \\  T_{111}\mathcal{T}_{121} + T_{112}\mathcal{T}_{122} + T_{113}\mathcal{T}_{123}\end{bmatrix}^{T} u_c\\
+    \mathcal{T}_{1N} = \sqrt{{\mathcal{T}_{111}}^{2}+{\mathcal{T}_{112}}^{2}+{\mathcal{T}_{113}}^{2}+{\mathcal{T}_{211}}^{2}+{\mathcal{T}_{212}}^{2}+{\mathcal{T}_{213}}^{2}+{\mathcal{T}_{311}}^{2}+{\mathcal{T}_{312}}^{2}+{\mathcal{T}_{313}}^{2} }
+  \end{gathered}
+\end{equation}
+
+Unfortunately, this normalization factor is dependent on the tensor coefficients which varies with time. So we need to find also the derivative of the normalization factor.
+\begin{equation}
+  \begin{gathered}
+    \dot{\mathcal{T}}_{1N} = \frac{1}{\mathcal{T}_{N}}(\mathcal{T}_{111}\dot{\mathcal{T}}_{111} + \mathcal{T}_{112}\dot{\mathcal{T}}_{112} + \mathcal{T}_{113}\dot{\mathcal{T}}_{113}+\mathcal{T}_{111}\dot{\mathcal{T}}_{111} \\+ \mathcal{T}_{212}\dot{\mathcal{T}}_{212} + \mathcal{T}_{213}\dot{\mathcal{T}}_{213}+\mathcal{T}_{311}\dot{\mathcal{T}}_{311} + \mathcal{T}_{312}\dot{\mathcal{T}}_{312} + \mathcal{T}_{313}\dot{\mathcal{T}}_{313})\\
+    %
+    \dot{\mathcal{T}}_{1N} = \frac{1}{\mathcal{T}_{N}}(\mathcal{T}_{111}(R_{i(11)} v_x - \mathcal{T}_{131} \omega_y + \mathcal{T}_{121} \omega_z) + \mathcal{T}_{112}(R_{i(21)} v_x - \mathcal{T}_{132} \omega_y + \mathcal{T}_{122} \omega_z) \\+ \mathcal{T}_{113}(R_{i(31)} v_x - \mathcal{T}_{133} \omega_y + \mathcal{T}_{123} \omega_z) + \mathcal{T}_{211}(R_{i(12)} v_x - \mathcal{T}_{231} \omega_y + \mathcal{T}_{221} \omega_z) \\+ \mathcal{T}_{212}(R_{i(22)} v_x - \mathcal{T}_{232} \omega_y + \mathcal{T}_{222} \omega_z) + \mathcal{T}_{213}(R_{i(32)} v_x - \mathcal{T}_{233} \omega_y + \mathcal{T}_{223} \omega_z)\\ +\mathcal{T}_{311}(R_{i(13)} v_x - \mathcal{T}_{331} \omega_y + \mathcal{T}_{321} \omega_z) + \mathcal{T}_{312}(R_{i(23)} v_x - \mathcal{T}_{332} \omega_y + \mathcal{T}_{322} \omega_z) \\+ \mathcal{T}_{313}(R_{i(31)} v_x - \mathcal{T}_{333} \omega_y + \mathcal{T}_{323} \omega_z))\\
+    %
+  \dot{\mathcal{T}}_{1N} = \begin{bmatrix}\sum_{n} \sum_{m} T_{n1m}R_{i(mn)}& 0 & 0 & 0 & \sum_{n} \sum_{m}-T_{n1m}\mathcal{T}_{n3m} & \sum_{n} \sum_{m} T_{n1m}\mathcal{T}_{n2m}\end{bmatrix} u_c\\
     \dot{\mathcal{T}}_{1N} = L_{1N} u_c\\
-    \\
+  \end{gathered}
+\end{equation}
+
+The derivative of the normalized tensor coefficients $T_{jkl}$ can then be found
+\begin{equation}
+  \begin{gathered}
     \dot{T}_{jkl} = \frac{\dot{\mathcal{T}}_{jkl}}{\mathcal{T}_{N}} - \frac{\mathcal{T}_{jkl} \dot{\mathcal{T}_{N}}}{{\mathcal{T}_{N}}^{2}}\\
     \dot{T}_{jkl} = \frac{L_{\mathcal{T}} u_c}{\mathcal{T}_{N}} - \frac{\mathcal{T}_{jkl} L_{N} u_c}{{\mathcal{T}_{N}}^{2}}\\
     \dot{T}_{jkl} = \frac{L_{\mathcal{T}} u_c}{\mathcal{T}_{N}} - \frac{T_{jkl} L_{N} u_c}{{\mathcal{T}_{N}}}\\
     \dot{T}_{jkl} = \frac{1}{\mathcal{T}_{N}} (L_{\mathcal{T}} - T_{jkl} L_{N}) u_c\\
     L_{T} = \frac{1}{\mathcal{T}_{N}} (L_{\mathcal{T}} - T_{jkl} L_{N})\\
-    L_{1T} = \frac{L_{1\mathcal{T}}}{\mathcal{T}_{1N}} - T_{j1l} \begin{bmatrix}T_{111}\frac{R_{i(11)}}{\mathcal{T}_{1N}} + T_{112}\frac{R_{i(21)}}{\mathcal{T}_{1N}} + T_{113}\frac{R_{i(31)}}{\mathcal{T}_{1N}} \\ 0 \\ 0 \\ 0 \\ -T_{111}T_{131} - T_{112}T_{132} - T_{113}T_{133} \\  T_{111}T_{121} + T_{112}T_{122} + T_{113}T_{123}\end{bmatrix}^{T}\\
-    \dot{T}_{(j1l)} = \frac{R_{i(lj)}}{\mathcal{T}_{1N}}v_{c(1)} -T_{(j1l)}(T_{111}\frac{R_{i(11)}}{\mathcal{T}_{1N}} + T_{112}\frac{R_{i(21)}}{\mathcal{T}_{1N}} + T_{113}\frac{R_{i(31)}}{\mathcal{T}_{1N}}) v_{c(1)}\\ + T_{(j1l)}(T_{111}T_{131} + T_{112}T_{132} + T_{113}T_{133})\omega_y - T_{(j1l)}(T_{111}T_{121} + T_{112}T_{122} + T_{113}T_{123})\omega_z \\+\sum_{m} {[\omega_{c}]}_{\times(1m)} T_{(jml)}\\
-  %L_{T(jkl)} = \begin{bmatrix}\frac{R_{i(11)}}{\mathcal{T}_{N}} -T_{(jkl)}(T_{111}\frac{R_{i(11)}}{\mathcal{T}_{N}} + T_{112}\frac{R_{i(21)}}{\mathcal{T}_{N}} + T_{113}\frac{R_{i(31)}}{\mathcal{T}_{N}}) \\ 0 \\ 0 \\ 0 \\ - T_{(131)} + T_{(jkl)}(T_{111}T_{131} + T_{112}T_{132} + T_{113}T_{133}) \\ T_{(121)} - T_{(jkl)}(T_{111}T_{121} + T_{112}T_{122} + T_{113}T_{123})\end{bmatrix}\\
+  L_{1T} = \frac{L_{1\mathcal{T}}}{\mathcal{T}_{1N}} - T_{j1l} \begin{bmatrix}\sum_n \sum_m T_{n1m}\frac{R_{i(mn)}}{\mathcal{T}_{1N}}& 0 & 0 & 0 & \sum_n \sum_m -T_{n1m}T_{n3m}& \sum_n \sum_m T_{n1m}T_{n2m}\end{bmatrix}\\
+    \dot{T}_{(j1l)} = \frac{R_{i(lj)}}{\mathcal{T}_{1N}}v_{c(1)} -T_{(j1l)}(\sum_n \sum_m T_{n1m}\frac{R_{i(mn)}}{\mathcal{T}_{1N}} ) v_{c(1)}\\ + T_{(j1l)}(\sum_n \sum_m T_{n1m}T_{n3m})\omega_y - T_{(j1l)}(\sum_n \sum_m T_{n1m}T_{n2m})\omega_z +\sum_{m} {[\omega_{c}]}_{\times(1m)} T_{(jml)}
   \end{gathered}\label{eq:tensornormalizationk1}
 \end{equation}
-%
-%The use of the initial camera position is conveniant in visual servoing as the normalization factor $\mathcal{T}_{N}$ is never equal to zero except when the initial and desired camera positions are the same, which is not valid in our context. Also, this normalization factor is constant with time and doesn't affect the tensor derivatives. The trifocal tensor estimation is then computed relative to the initial camera position distance which can be estimated in the initialization step and used further for the control loop.
-Same approach can be applied again for the rest of the elemtns for $k= 2,3$:
+
+Same approach can be applied again for the rest of the elements for $k= 2,3$:
 \begin{equation}
   \begin{gathered}
     T_{j2l} = \frac{\mathcal{T}_{j2l}}{\mathcal{T}_{2N}}\\
-    \mathcal{T}_{2N} = \sqrt{{\mathcal{T}_{221}}^{2}+{\mathcal{T}_{222}}^{2}+{\mathcal{T}_{223}}^{2}}\\
-    \dot{\mathcal{T}}_{2N} = \frac{1}{\sqrt{{\mathcal{T}_{221}}^{2}+{\mathcal{T}_{222}}^{2}+{\mathcal{T}_{223}}^{2}}}(\mathcal{T}_{221}\dot{\mathcal{T}}_{221} + \mathcal{T}_{222}\dot{\mathcal{T}}_{222} + \mathcal{T}_{223}\dot{\mathcal{T}}_{223})\\
-    \dot{\mathcal{T}}_{2N} = \frac{1}{\mathcal{T}_{2N}}(\mathcal{T}_{221}\dot{\mathcal{T}}_{221} + \mathcal{T}_{222}\dot{\mathcal{T}}_{222} + \mathcal{T}_{223}\dot{\mathcal{T}}_{223})\\
-    \dot{\mathcal{T}}_{2N} = \frac{1}{\mathcal{T}_{2N}}(\mathcal{T}_{221}(R_{i(12)} v_y - \mathcal{T}_{231} \omega_x + \mathcal{T}_{211} \omega_z) \\+ \mathcal{T}_{222}(R_{i(22)} v_y - \mathcal{T}_{232} \omega_x + \mathcal{T}_{212} \omega_z) + \mathcal{T}_{223}(R_{i(32)} v_y - \mathcal{T}_{233} \omega_x + \mathcal{T}_{213} \omega_z))\\
-  \dot{\mathcal{T}}_{2N} = \begin{bmatrix}0 \\ T_{221}R_{i(12)} + T_{222}R_{i(22)} + T_{223}R_{i(32)} \\ 0 \\  T_{221}\mathcal{T}_{231} + T_{222}\mathcal{T}_{232} + T_{223}\mathcal{T}_{233} \\ 0 \\ -T_{221}\mathcal{T}_{211} - T_{222}\mathcal{T}_{212} - T_{223}\mathcal{T}_{213}\end{bmatrix}^{T} u_c\\
-    \dot{\mathcal{T}}_{3N} = \begin{bmatrix}0 \\ 0 \\ T_{331}R_{i(13)} + T_{332}R_{i(23)} + T_{333}R_{i(33)} \\  -T_{331}\mathcal{T}_{321} - T_{332}\mathcal{T}_{322} - T_{333}\mathcal{T}_{323} \\ T_{331}\mathcal{T}_{311} + T_{332}\mathcal{T}_{312} + T_{333}\mathcal{T}_{313} \\ 0\end{bmatrix}^{T} u_c\\
+    \mathcal{T}_{2N} = \sqrt{{\mathcal{T}_{121}}^{2}+{\mathcal{T}_{122}}^{2}+{\mathcal{T}_{123}}^{2}+{\mathcal{T}_{221}}^{2}+{\mathcal{T}_{222}}^{2}+{\mathcal{T}_{223}}^{2}+{\mathcal{T}_{321}}^{2}+{\mathcal{T}_{322}}^{2}+{\mathcal{T}_{323}}^{2} }\\
+  \dot{\mathcal{T}}_{2N} = \begin{bmatrix}0 & \sum_n \sum_m T_{n2m}R_{i(mn)} & 0 & \sum_n \sum_m T_{n2m}\mathcal{T}_{n3m} & 0 & \sum_n \sum_m -T_{n2m}\mathcal{T}_{n1m}\end{bmatrix} u_c\\
     \\
-    \dot{T}_{(jkl)} = \frac{R_{i(lj)}}{\mathcal{T}_{kN}}v_{c(k)} -T_{(jkl)}(\sum_{m}T_{kkm}\frac{R_{i(mk)}}{\mathcal{T}_{kN}}) v_{c(k)}\\ + T_{(jkl)}(\sum_{m}T_{kkm}T_{khm})\omega_{(g)} - T_{(jkl)}(\sum_{m}T_{kkm}T_{kgm})\omega_{(h)} \\+\sum_{m} {[\omega_{c}]}_{\times(km)} T_{(jml)}\\
-      \text{where } g = k\%3 +1, h = (k+1)\%3 +1
+    T_{j3l} = \frac{\mathcal{T}_{j3l}}{\mathcal{T}_{3N}}\\
+    \mathcal{T}_{3N} = \sqrt{{\mathcal{T}_{131}}^{2}+{\mathcal{T}_{132}}^{2}+{\mathcal{T}_{133}}^{2}+{\mathcal{T}_{231}}^{2}+{\mathcal{T}_{232}}^{2}+{\mathcal{T}_{233}}^{2}+{\mathcal{T}_{331}}^{2}+{\mathcal{T}_{332}}^{2}+{\mathcal{T}_{333}}^{2} }\\
+  \dot{\mathcal{T}}_{3N} = \begin{bmatrix}0 & 0 & \sum_n \sum_m T_{n3m}R_{i(mn)}& \sum_n \sum_m -T_{n3m}\mathcal{T}_{n2m}& \sum_n \sum_m T_{n3m}\mathcal{T}_{n1m}& 0\end{bmatrix} u_c
   \end{gathered}\label{eq:tensornormalizationk23}
 \end{equation}
+\clearpage
 
+Using \eqref{eq:tensornormalizationk1} and \eqref{eq:tensornormalizationk23}, a general formula for $\dot{T}_{(jkl)}$ can then be found as following
+\begin{equation}
+  \begin{gathered}
+    \dot{T}_{(jkl)} = \frac{R_{i(lj)}}{\mathcal{T}_{kN}}v_{c(k)} -T_{(jkl)}(\sum_n \sum_{m}T_{nkm}\frac{R_{i(mn)}}{\mathcal{T}_{kN}}) v_{c(k)}\\ + T_{(jkl)}(\sum_n \sum_{m}T_{nkm}T_{nhm})\omega_{(g)} - T_{(jkl)}(\sum_n \sum_{m}T_{nkm}T_{ngm})\omega_{(h)} \\+\sum_{m} {[\omega_{c}]}_{\times(km)} T_{(jml)}\\
+      \text{where } g = k\%3 +1, h = (k+1)\%3 +1
+  \end{gathered}\label{eq:tensornormalizationgeneral}
+\end{equation}
+
+From \eqref{eq:tensornormalizationgeneral}, the final normalized interaction matrix is given in \eqref{eq:interactionmatrixnormalized}. The normalized interaction matrix when reaching the desired pose is given in \eqref{eq:interactionmatrixnormalizeddesired}.
+
+As we notice, this particular choice for the normalization factors has led to keep the decoupling property between the translational velocities, as each degree of freedom related tensor coefficients are normalized separately from other degrees of freedom. Other choices of different combinations of tensor coefficients as normalization factors, would introduce extra non-zero elements to the normalized interaction matrix and prevent keeping the decoupling property.
+
+\clearpage
 \begin{landscape}
-Normalized Interaction Matrix
 \begin{equation}
 \begin{gathered}
-% L_{\mathcal{T}_{(jkl)}} = %\frac{1}{\mathcal{T}_{N}}
-  \scalemath{0.70}{
+  \scalemath{0.75}{
   \begin{bmatrix}
-    \frac{R_{i(11)}}{\mathcal{T}_{N}} -T_{(111)}(\sum_{m}T_{11m}\frac{R_{i(m1)}}{\mathcal{T}_{1N}}) & 0 & 0 & 0 & - T_{(131)} + T_{(111)}(\sum_{m}T_{11m}T_{13m}) & T_{(121)}- T_{(111)}(\sum_{m}T_{11m}T_{12m})\\
-    \frac{R_{i(21)}}{\mathcal{T}_{N}} -T_{(112)}(\sum_{m}T_{11m}\frac{R_{i(m1)}}{\mathcal{T}_{1N}}) & 0 & 0 & 0 & - T_{(132)} + T_{(112)}(\sum_{m}T_{11m}T_{13m}) & T_{(122)}- T_{(112)}(\sum_{m}T_{11m}T_{12m})\\
-    \frac{R_{i(31)}}{\mathcal{T}_{N}} -T_{(113)}(\sum_{m}T_{11m}\frac{R_{i(m1)}}{\mathcal{T}_{1N}}) & 0 & 0 & 0 & - T_{(133)} + T_{(113)}(\sum_{m}T_{11m}T_{13m}) & T_{(123)}- T_{(113)}(\sum_{m}T_{11m}T_{12m})\\
+    \frac{R_{i(11)}}{\mathcal{T}_{1N}} -T_{(111)}(\text{sum-vx}) & 0 & 0 & 0 & - T_{(131)} + T_{(111)}(\text{sum-wy1}) & T_{(121)}- T_{(111)}(\text{sum-wz1})\\
+    \frac{R_{i(21)}}{\mathcal{T}_{1N}} -T_{(112)}(\text{sum-vx}) & 0 & 0 & 0 & - T_{(132)} + T_{(112)}(\text{sum-wy1}) & T_{(122)}- T_{(112)}(\text{sum-wz1})\\
+    \frac{R_{i(31)}}{\mathcal{T}_{1N}} -T_{(113)}(\text{sum-vx}) & 0 & 0 & 0 & - T_{(133)} + T_{(113)}(\text{sum-wy1}) & T_{(123)}- T_{(113)}(\text{sum-wz1})\\
 
-    0 & \frac{R_{i(11)}}{\mathcal{T}_{N}} -T_{(121)}(\sum_{m}T_{22m}\frac{R_{i(m2)}}{\mathcal{T}_{2N}}) & 0 & T_{(131)} - T_{(121)}(\sum_{m}T_{22m}T_{23m})& 0 & - T_{(111)}+ T_{(121)}(\sum_{m}T_{22m}T_{21m})\\
-    0 & \frac{R_{i(21)}}{\mathcal{T}_{N}} -T_{(122)}(\sum_{m}T_{22m}\frac{R_{i(m2)}}{\mathcal{T}_{2N}}) & 0 & T_{(132)} - T_{(122)}(\sum_{m}T_{22m}T_{23m})& 0 & - T_{(112)}+ T_{(122)}(\sum_{m}T_{22m}T_{21m})\\
-    0 & \frac{R_{i(31)}}{\mathcal{T}_{N}} -T_{(123)}(\sum_{m}T_{22m}\frac{R_{i(m2)}}{\mathcal{T}_{2N}}) & 0 & T_{(133)} - T_{(123)}(\sum_{m}T_{22m}T_{23m})& 0 & - T_{(113)}+ T_{(123)}(\sum_{m}T_{22m}T_{21m})\\
+    0 & \frac{R_{i(11)}}{\mathcal{T}_{2N}} -T_{(121)}(\text{sum-vy}) & 0 & T_{(131)} - T_{(121)}(\text{sum-wx2})& 0 & - T_{(111)}+ T_{(121)}(\text{sum-wz2})\\
+    0 & \frac{R_{i(21)}}{\mathcal{T}_{2N}} -T_{(122)}(\text{sum-vy}) & 0 & T_{(132)} - T_{(122)}(\text{sum-wx2})& 0 & - T_{(112)}+ T_{(122)}(\text{sum-wz2})\\
+    0 & \frac{R_{i(31)}}{\mathcal{T}_{2N}} -T_{(123)}(\text{sum-vy}) & 0 & T_{(133)} - T_{(123)}(\text{sum-wx2})& 0 & - T_{(113)}+ T_{(123)}(\text{sum-wz2})\\
 
-    0 & 0 & \frac{R_{i(11)}}{\mathcal{T}_{N}} -T_{(131)}(\sum_{m}T_{33m}\frac{R_{i(m3)}}{\mathcal{T}_{3N}}) & - T_{(121)} + T_{(131)}(\sum_{m}T_{33m}T_{32m}) & T_{(111)} - T_{(131)}(\sum_{m}T_{33m}T_{31m})& 0 \\
-    0 & 0 & \frac{R_{i(21)}}{\mathcal{T}_{N}} -T_{(132)}(\sum_{m}T_{33m}\frac{R_{i(m3)}}{\mathcal{T}_{3N}}) & - T_{(122)} + T_{(132)}(\sum_{m}T_{33m}T_{32m}) & T_{(112)} - T_{(132)}(\sum_{m}T_{33m}T_{31m})& 0 \\
-    0 & 0 & \frac{R_{i(31)}}{\mathcal{T}_{N}} -T_{(133)}(\sum_{m}T_{33m}\frac{R_{i(m3)}}{\mathcal{T}_{3N}}) & - T_{(123)} + T_{(133)}(\sum_{m}T_{33m}T_{32m}) & T_{(113)} - T_{(133)}(\sum_{m}T_{33m}T_{31m})& 0 \\
-
-
-    \frac{R_{i(12)}}{\mathcal{T}_{N}} -T_{(211)}(\sum_{m}T_{11m}\frac{R_{i(m1)}}{\mathcal{T}_{1N}}) & 0 & 0 & 0 & - T_{(231)} + T_{(211)}(\sum_{m}T_{11m}T_{13m}) & T_{(221)}- T_{(211)}(\sum_{m}T_{11m}T_{12m})\\
-    \frac{R_{i(22)}}{\mathcal{T}_{N}} -T_{(212)}(\sum_{m}T_{11m}\frac{R_{i(m1)}}{\mathcal{T}_{1N}}) & 0 & 0 & 0 & - T_{(232)} + T_{(212)}(\sum_{m}T_{11m}T_{13m}) & T_{(222)}- T_{(212)}(\sum_{m}T_{11m}T_{12m})\\
-    \frac{R_{i(32)}}{\mathcal{T}_{N}} -T_{(213)}(\sum_{m}T_{11m}\frac{R_{i(m1)}}{\mathcal{T}_{1N}}) & 0 & 0 & 0 & - T_{(233)} + T_{(213)}(\sum_{m}T_{11m}T_{13m}) & T_{(223)}- T_{(213)}(\sum_{m}T_{11m}T_{12m})\\
-
-    0 & \frac{R_{i(12)}}{\mathcal{T}_{N}} -T_{(221)}(\sum_{m}T_{22m}\frac{R_{i(m2)}}{\mathcal{T}_{2N}}) & 0 & T_{(231)} - T_{(221)}(\sum_{m}T_{22m}T_{23m})& 0 & - T_{(211)}+ T_{(221)}(\sum_{m}T_{22m}T_{21m})\\
-    0 & \frac{R_{i(22)}}{\mathcal{T}_{N}} -T_{(222)}(\sum_{m}T_{22m}\frac{R_{i(m2)}}{\mathcal{T}_{2N}}) & 0 & T_{(232)} - T_{(222)}(\sum_{m}T_{22m}T_{23m})& 0 & - T_{(212)}+ T_{(222)}(\sum_{m}T_{22m}T_{21m})\\
-    0 & \frac{R_{i(32)}}{\mathcal{T}_{N}} -T_{(223)}(\sum_{m}T_{22m}\frac{R_{i(m2)}}{\mathcal{T}_{2N}}) & 0 & T_{(233)} - T_{(223)}(\sum_{m}T_{22m}T_{23m})& 0 & - T_{(213)}+ T_{(223)}(\sum_{m}T_{22m}T_{21m})\\
-
-    0 & 0 & \frac{R_{i(12)}}{\mathcal{T}_{N}} -T_{(231)}(\sum_{m}T_{33m}\frac{R_{i(m3)}}{\mathcal{T}_{3N}}) & - T_{(221)} + T_{(231)}(\sum_{m}T_{33m}T_{32m}) & T_{(211)} - T_{(231)}(\sum_{m}T_{33m}T_{31m})& 0 \\
-    0 & 0 & \frac{R_{i(22)}}{\mathcal{T}_{N}} -T_{(232)}(\sum_{m}T_{33m}\frac{R_{i(m3)}}{\mathcal{T}_{3N}}) & - T_{(222)} + T_{(232)}(\sum_{m}T_{33m}T_{32m}) & T_{(212)} - T_{(232)}(\sum_{m}T_{33m}T_{31m})& 0 \\
-    0 & 0 & \frac{R_{i(32)}}{\mathcal{T}_{N}} -T_{(233)}(\sum_{m}T_{33m}\frac{R_{i(m3)}}{\mathcal{T}_{3N}}) & - T_{(223)} + T_{(233)}(\sum_{m}T_{33m}T_{32m}) & T_{(213)} - T_{(233)}(\sum_{m}T_{33m}T_{31m})& 0 \\
+    0 & 0 & \frac{R_{i(11)}}{\mathcal{T}_{3N}} -T_{(131)}(\text{sum-vz}) & - T_{(121)} + T_{(131)}(\text{sum-wx3}) & T_{(111)} - T_{(131)}(\text{sum-wy3})& 0 \\
+    0 & 0 & \frac{R_{i(21)}}{\mathcal{T}_{3N}} -T_{(132)}(\text{sum-vz}) & - T_{(122)} + T_{(132)}(\text{sum-wx3}) & T_{(112)} - T_{(132)}(\text{sum-wy3})& 0 \\
+    0 & 0 & \frac{R_{i(31)}}{\mathcal{T}_{3N}} -T_{(133)}(\text{sum-vz}) & - T_{(123)} + T_{(133)}(\text{sum-wx3}) & T_{(113)} - T_{(133)}(\text{sum-wy3})& 0 \\
 
 
-    \frac{R_{i(13)}}{\mathcal{T}_{N}} -T_{(311)}(\sum_{m}T_{11m}\frac{R_{i(m1)}}{\mathcal{T}_{1N}}) & 0 & 0 & 0 & - T_{(331)} + T_{(311)}(\sum_{m}T_{11m}T_{13m}) & T_{(321)}- T_{(311)}(\sum_{m}T_{11m}T_{12m})\\
-    \frac{R_{i(23)}}{\mathcal{T}_{N}} -T_{(312)}(\sum_{m}T_{11m}\frac{R_{i(m1)}}{\mathcal{T}_{1N}}) & 0 & 0 & 0 & - T_{(332)} + T_{(312)}(\sum_{m}T_{11m}T_{13m}) & T_{(322)}- T_{(312)}(\sum_{m}T_{11m}T_{12m})\\
-    \frac{R_{i(33)}}{\mathcal{T}_{N}} -T_{(313)}(\sum_{m}T_{11m}\frac{R_{i(m1)}}{\mathcal{T}_{1N}}) & 0 & 0 & 0 & - T_{(333)} + T_{(313)}(\sum_{m}T_{11m}T_{13m}) & T_{(323)}- T_{(313)}(\sum_{m}T_{11m}T_{12m})\\
+    \frac{R_{i(12)}}{\mathcal{T}_{1N}} -T_{(211)}(\text{sum-vx}) & 0 & 0 & 0 & - T_{(231)} + T_{(211)}(\text{sum-wy1}) & T_{(221)}- T_{(211)}(\text{sum-wz1})\\
+    \frac{R_{i(22)}}{\mathcal{T}_{1N}} -T_{(212)}(\text{sum-vx}) & 0 & 0 & 0 & - T_{(232)} + T_{(212)}(\text{sum-wy1}) & T_{(222)}- T_{(212)}(\text{sum-wz1})\\
+    \frac{R_{i(32)}}{\mathcal{T}_{1N}} -T_{(213)}(\text{sum-vx}) & 0 & 0 & 0 & - T_{(233)} + T_{(213)}(\text{sum-wy1}) & T_{(223)}- T_{(213)}(\text{sum-wz1})\\
 
-    0 & \frac{R_{i(13)}}{\mathcal{T}_{N}} -T_{(321)}(\sum_{m}T_{22m}\frac{R_{i(m2)}}{\mathcal{T}_{2N}}) & 0 & T_{(331)} - T_{(321)}(\sum_{m}T_{22m}T_{23m})& 0 & - T_{(311)}+ T_{(321)}(\sum_{m}T_{22m}T_{21m})\\
-    0 & \frac{R_{i(23)}}{\mathcal{T}_{N}} -T_{(322)}(\sum_{m}T_{22m}\frac{R_{i(m2)}}{\mathcal{T}_{2N}}) & 0 & T_{(332)} - T_{(322)}(\sum_{m}T_{22m}T_{23m})& 0 & - T_{(312)}+ T_{(322)}(\sum_{m}T_{22m}T_{21m})\\
-    0 & \frac{R_{i(33)}}{\mathcal{T}_{N}} -T_{(323)}(\sum_{m}T_{22m}\frac{R_{i(m2)}}{\mathcal{T}_{2N}}) & 0 & T_{(333)} - T_{(323)}(\sum_{m}T_{22m}T_{23m})& 0 & - T_{(313)}+ T_{(323)}(\sum_{m}T_{22m}T_{21m})\\
+    0 & \frac{R_{i(12)}}{\mathcal{T}_{2N}} -T_{(221)}(\text{sum-vy}) & 0 & T_{(231)} - T_{(221)}(\text{sum-wx2})& 0 & - T_{(211)}+ T_{(221)}(\text{sum-wz2})\\
+    0 & \frac{R_{i(22)}}{\mathcal{T}_{2N}} -T_{(222)}(\text{sum-vy}) & 0 & T_{(232)} - T_{(222)}(\text{sum-wx2})& 0 & - T_{(212)}+ T_{(222)}(\text{sum-wz2})\\
+    0 & \frac{R_{i(32)}}{\mathcal{T}_{2N}} -T_{(223)}(\text{sum-vy}) & 0 & T_{(233)} - T_{(223)}(\text{sum-wx2})& 0 & - T_{(213)}+ T_{(223)}(\text{sum-wz2})\\
 
-    0 & 0 & \frac{R_{i(13)}}{\mathcal{T}_{N}} -T_{(331)}(\sum_{m}T_{33m}\frac{R_{i(m3)}}{\mathcal{T}_{3N}}) & - T_{(321)} + T_{(331)}(\sum_{m}T_{33m}T_{32m}) & T_{(311)} - T_{(331)}(\sum_{m}T_{33m}T_{31m})& 0 \\
-    0 & 0 & \frac{R_{i(23)}}{\mathcal{T}_{N}} -T_{(332)}(\sum_{m}T_{33m}\frac{R_{i(m3)}}{\mathcal{T}_{3N}}) & - T_{(322)} + T_{(332)}(\sum_{m}T_{33m}T_{32m}) & T_{(312)} - T_{(332)}(\sum_{m}T_{33m}T_{31m})& 0 \\
-    0 & 0 & \frac{R_{i(33)}}{\mathcal{T}_{N}} -T_{(333)}(\sum_{m}T_{33m}\frac{R_{i(m3)}}{\mathcal{T}_{3N}}) & - T_{(323)} + T_{(333)}(\sum_{m}T_{33m}T_{32m}) & T_{(313)} - T_{(333)}(\sum_{m}T_{33m}T_{31m})& 0
+    0 & 0 & \frac{R_{i(12)}}{\mathcal{T}_{3N}} -T_{(231)}(\text{sum-vz}) & - T_{(221)} + T_{(231)}(\text{sum-wx3}) & T_{(211)} - T_{(231)}(\text{sum-wy3})& 0 \\
+    0 & 0 & \frac{R_{i(22)}}{\mathcal{T}_{3N}} -T_{(232)}(\text{sum-vz}) & - T_{(222)} + T_{(232)}(\text{sum-wx3}) & T_{(212)} - T_{(232)}(\text{sum-wy3})& 0 \\
+    0 & 0 & \frac{R_{i(32)}}{\mathcal{T}_{3N}} -T_{(233)}(\text{sum-vz}) & - T_{(223)} + T_{(233)}(\text{sum-wx3}) & T_{(213)} - T_{(233)}(\text{sum-wy3})& 0 \\
+
+
+    \frac{R_{i(13)}}{\mathcal{T}_{1N}} -T_{(311)}(\text{sum-vx}) & 0 & 0 & 0 & - T_{(331)} + T_{(311)}(\text{sum-wy1}) & T_{(321)}- T_{(311)}(\text{sum-wz1})\\
+    \frac{R_{i(23)}}{\mathcal{T}_{1N}} -T_{(312)}(\text{sum-vx}) & 0 & 0 & 0 & - T_{(332)} + T_{(312)}(\text{sum-wy1}) & T_{(322)}- T_{(312)}(\text{sum-wz1})\\
+    \frac{R_{i(33)}}{\mathcal{T}_{1N}} -T_{(313)}(\text{sum-vx}) & 0 & 0 & 0 & - T_{(333)} + T_{(313)}(\text{sum-wy1}) & T_{(323)}- T_{(313)}(\text{sum-wz1})\\
+
+    0 & \frac{R_{i(13)}}{\mathcal{T}_{2N}} -T_{(321)}(\text{sum-vy}) & 0 & T_{(331)} - T_{(321)}(\text{sum-wx2})& 0 & - T_{(311)}+ T_{(321)}(\text{sum-wz2})\\
+    0 & \frac{R_{i(23)}}{\mathcal{T}_{2N}} -T_{(322)}(\text{sum-vy}) & 0 & T_{(332)} - T_{(322)}(\text{sum-wx2})& 0 & - T_{(312)}+ T_{(322)}(\text{sum-wz2})\\
+    0 & \frac{R_{i(33)}}{\mathcal{T}_{2N}} -T_{(323)}(\text{sum-vy}) & 0 & T_{(333)} - T_{(323)}(\text{sum-wx2})& 0 & - T_{(313)}+ T_{(323)}(\text{sum-wz2})\\
+
+    0 & 0 & \frac{R_{i(13)}}{\mathcal{T}_{3N}} -T_{(331)}(\text{sum-vz}) & - T_{(321)} + T_{(331)}(\text{sum-wx3}) & T_{(311)} - T_{(331)}(\text{sum-wy3})& 0 \\
+    0 & 0 & \frac{R_{i(23)}}{\mathcal{T}_{3N}} -T_{(332)}(\text{sum-vz}) & - T_{(322)} + T_{(332)}(\text{sum-wx3}) & T_{(312)} - T_{(332)}(\text{sum-wy3})& 0 \\
+    0 & 0 & \frac{R_{i(33)}}{\mathcal{T}_{3N}} -T_{(333)}(\text{sum-vz}) & - T_{(323)} + T_{(333)}(\text{sum-wx3}) & T_{(313)} - T_{(333)}(\text{sum-wy3})& 0
   \end{bmatrix}
+}\\
+\scalemath{0.70}{
+  \text{sum-vx} = \sum_n \sum_m T_{n1m}\frac{R_{i(mn)}}{\mathcal{T}_{1N}}, \text{sum-wy1} = \sum_n \sum_{m}T_{n1m}T_{n3m}, \text{sum-wz1} = \sum_n \sum_{m}T_{n1m}T_{n2m}
+}\\
+\scalemath{0.70}{
+  \text{sum-vy} = \sum_n \sum_m T_{n2m}\frac{R_{i(mn)}}{\mathcal{T}_{2N}}, \text{sum-wx2} = \sum_n \sum_{m}T_{n2m}T_{n3m}, \text{sum-wz2} = \sum_n \sum_{m}T_{n2m}T_{n1m}
+}\\
+\scalemath{0.70}{
+  \text{sum-vz} = \sum_n \sum_m T_{n3m}\frac{R_{i(mn)}}{\mathcal{T}_{3N}}, \text{sum-wx3} = \sum_n \sum_{m}T_{n3m}T_{n2m}, \text{sum-wy3} = \sum_n \sum_{m}T_{n3m}T_{n1m}
 }
 \end{gathered}\label{eq:interactionmatrixnormalized}
 \end{equation}
 \end{landscape}
-
+\clearpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{landscape}
- Normalized Interaction Matrix at desired position
 \begin{equation}
 \begin{gathered}
-% L_{\mathcal{T}_{(jkl)}} = %\frac{1}{\mathcal{T}_{N}}
-  \scalemath{0.70}{
+  \scalemath{0.75}{
   \begin{bmatrix}
-    \frac{R_{i(11)}}{\mathcal{T}_{N}} -T_{(111)}(\sum_{m}T_{11m}\frac{R_{i(m1)}}{\mathcal{T}_{1N}}) & 0 & 0 & 0 & T_{(111)}(\sum_{m}T_{11m}T_{13m}) & - T_{(111)}(\sum_{m}T_{11m}T_{12m})\\
-    \frac{R_{i(21)}}{\mathcal{T}_{N}} -T_{(112)}(\sum_{m}T_{11m}\frac{R_{i(m1)}}{\mathcal{T}_{1N}}) & 0 & 0 & 0 & T_{(112)}(\sum_{m}T_{11m}T_{13m}) & - T_{(112)}(\sum_{m}T_{11m}T_{12m})\\
-    \frac{R_{i(31)}}{\mathcal{T}_{N}} -T_{(113)}(\sum_{m}T_{11m}\frac{R_{i(m1)}}{\mathcal{T}_{1N}}) & 0 & 0 & 0 & T_{(113)}(\sum_{m}T_{11m}T_{13m}) & - T_{(113)}(\sum_{m}T_{11m}T_{12m})\\
+    \frac{R_{i(11)}}{\mathcal{T}_{N}} -T_{(111)}(\text{sum-vx}) & 0 & 0 & 0 & T_{(111)}(\text{sum-wy1}) & - T_{(111)}(\text{sum-wz1})\\
+    \frac{R_{i(21)}}{\mathcal{T}_{N}} -T_{(112)}(\text{sum-vx}) & 0 & 0 & 0 & T_{(112)}(\text{sum-wy1}) & - T_{(112)}(\text{sum-wz1})\\
+    \frac{R_{i(31)}}{\mathcal{T}_{N}} -T_{(113)}(\text{sum-vx}) & 0 & 0 & 0 & T_{(113)}(\text{sum-wy1}) & - T_{(113)}(\text{sum-wz1})\\
 
     0 & \frac{R_{i(11)}}{\mathcal{T}_{N}} & 0 & 0 & 0 & - T_{(111)}\\
     0 & \frac{R_{i(21)}}{\mathcal{T}_{N}} & 0 & 0 & 0 & - T_{(112)}\\
@@ -414,9 +417,9 @@ Normalized Interaction Matrix
     \frac{R_{i(22)}}{\mathcal{T}_{N}} & 0 & 0 & 0 & 0 & T_{(222)}\\
     \frac{R_{i(32)}}{\mathcal{T}_{N}} & 0 & 0 & 0 & 0 & T_{(223)}\\
 
-    0 & \frac{R_{i(12)}}{\mathcal{T}_{N}} -T_{(221)}(\sum_{m}T_{22m}\frac{R_{i(m2)}}{\mathcal{T}_{2N}}) & 0 & - T_{(221)}(\sum_{m}T_{22m}T_{23m})& 0 & T_{(221)}(\sum_{m}T_{22m}T_{21m})\\
-    0 & \frac{R_{i(22)}}{\mathcal{T}_{N}} -T_{(222)}(\sum_{m}T_{22m}\frac{R_{i(m2)}}{\mathcal{T}_{2N}}) & 0 & - T_{(222)}(\sum_{m}T_{22m}T_{23m})& 0 & T_{(222)}(\sum_{m}T_{22m}T_{21m})\\
-    0 & \frac{R_{i(32)}}{\mathcal{T}_{N}} -T_{(223)}(\sum_{m}T_{22m}\frac{R_{i(m2)}}{\mathcal{T}_{2N}}) & 0 & - T_{(223)}(\sum_{m}T_{22m}T_{23m})& 0 & T_{(223)}(\sum_{m}T_{22m}T_{21m})\\
+    0 & \frac{R_{i(12)}}{\mathcal{T}_{N}} -T_{(221)}(\text{sum-vy}) & 0 & - T_{(221)}(\text{sum-wx2})& 0 & T_{(221)}(\text{sum-wz2})\\
+    0 & \frac{R_{i(22)}}{\mathcal{T}_{N}} -T_{(222)}(\text{sum-vy}) & 0 & - T_{(222)}(\text{sum-wx2})& 0 & T_{(222)}(\text{sum-wz2})\\
+    0 & \frac{R_{i(32)}}{\mathcal{T}_{N}} -T_{(223)}(\text{sum-vy}) & 0 & - T_{(223)}(\text{sum-wx2})& 0 & T_{(223)}(\text{sum-wz2})\\
 
     0 & 0 & \frac{R_{i(12)}}{\mathcal{T}_{N}} & - T_{(221)} & 0 & 0 \\
     0 & 0 & \frac{R_{i(22)}}{\mathcal{T}_{N}} & - T_{(222)} & 0 & 0 \\
@@ -431,13 +434,20 @@ Normalized Interaction Matrix
     0 & \frac{R_{i(23)}}{\mathcal{T}_{N}} & 0 & T_{(332)} & 0 & 0\\
     0 & \frac{R_{i(33)}}{\mathcal{T}_{N}} & 0 & T_{(333)} & 0 & 0\\
 
-    0 & 0 & \frac{R_{i(13)}}{\mathcal{T}_{N}} -T_{(331)}(\sum_{m}T_{33m}\frac{R_{i(m3)}}{\mathcal{T}_{3N}}) & T_{(331)}(\sum_{m}T_{33m}T_{32m}) & - T_{(331)}(\sum_{m}T_{33m}T_{31m})& 0 \\
-    0 & 0 & \frac{R_{i(23)}}{\mathcal{T}_{N}} -T_{(332)}(\sum_{m}T_{33m}\frac{R_{i(m3)}}{\mathcal{T}_{3N}}) & T_{(332)}(\sum_{m}T_{33m}T_{32m}) & - T_{(332)}(\sum_{m}T_{33m}T_{31m})& 0 \\
-    0 & 0 & \frac{R_{i(33)}}{\mathcal{T}_{N}} -T_{(333)}(\sum_{m}T_{33m}\frac{R_{i(m3)}}{\mathcal{T}_{3N}}) & T_{(333)}(\sum_{m}T_{33m}T_{32m}) & - T_{(333)}(\sum_{m}T_{33m}T_{31m})& 0
+    0 & 0 & \frac{R_{i(13)}}{\mathcal{T}_{N}} -T_{(331)}(\text{sum-vz}) & T_{(331)}(\text{sum-wx3}) & - T_{(331)}(\text{sum-wy3})& 0 \\
+    0 & 0 & \frac{R_{i(23)}}{\mathcal{T}_{N}} -T_{(332)}(\text{sum-vz}) & T_{(332)}(\text{sum-wx3}) & - T_{(332)}(\text{sum-wy3})& 0 \\
+    0 & 0 & \frac{R_{i(33)}}{\mathcal{T}_{N}} -T_{(333)}(\text{sum-vz}) & T_{(333)}(\text{sum-wx3}) & - T_{(333)}(\text{sum-wy3})& 0
   \end{bmatrix}
+}\\
+\scalemath{0.70}{
+  \text{sum-vx} = \sum_n \sum_m T_{n1m}\frac{R_{i(mn)}}{\mathcal{T}_{1N}}, \text{sum-wy1} = \sum_n \sum_{m}T_{n1m}T_{n3m}, \text{sum-wz1} = \sum_n \sum_{m}T_{n1m}T_{n2m}
+}\\
+\scalemath{0.70}{
+  \text{sum-vy} = \sum_n \sum_m T_{n2m}\frac{R_{i(mn)}}{\mathcal{T}_{2N}}, \text{sum-wx2} = \sum_n \sum_{m}T_{n2m}T_{n3m}, \text{sum-wz2} = \sum_n \sum_{m}T_{n2m}T_{n1m}
+}\\
+\scalemath{0.70}{
+  \text{sum-vz} = \sum_n \sum_m T_{n3m}\frac{R_{i(mn)}}{\mathcal{T}_{3N}}, \text{sum-wx3} = \sum_n \sum_{m}T_{n3m}T_{n2m}, \text{sum-wy3} = \sum_n \sum_{m}T_{n3m}T_{n1m}
 }
 \end{gathered}\label{eq:interactionmatrixnormalizeddesired}
 \end{equation}
 \end{landscape}
-
-

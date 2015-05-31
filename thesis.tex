@@ -12,9 +12,12 @@
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage[bookmarks=true,pdfborder={0 0 0}]{hyperref}
-\usepackage{subfig}
+\usepackage{subcaption}
 \usepackage{tensor}
 \usepackage{lscape}
+\usepackage[export]{adjustbox}
+\usepackage{mdframed}
+\usepackage{textcomp}
 
 % for margins left, right top bottom
 \usepackage{anysize}
@@ -29,6 +32,9 @@
 %omitting any of these makes the thesis compile without the omitted
 %chapter - good for editing single chapters.
 %\includeonly{header,intro,background,appendix}
+\providecommand{\e}[1]{\ensuremath{10^{#1}}}
+\allowdisplaybreaks%%%
+\newcommand\scalemath[2]{\scalebox{#1}{\mbox{\ensuremath{\displaystyle #2}}}}
 
 \begin{document}
 \newpage
@@ -44,7 +50,14 @@
 %DEFINES TITLE PAGE, and contains abstract, acknowledgements, etc.
 \include{tex/header}
 \include{tex/abstract}
-\include{tex/about}
+\chapter*{Acknowledgments}
+%\addcontentsline{toc}{chapter} {\protect\numberline{Acknowledgments\hspace{-96pt}}}
+
+\begin{center}
+Many thanks to all my professors and colleagues in the VIBOT/MsCV family for giving me the opportunity of joining this family. To my supervisor Prof. Chaumette for his patience and guidance through all the past months working on this thesis. To my best friends for their support and keeping me virtually at home. Finally, special thanks to my family and parents for their unconditional and endless support to help me achieve who I am today.
+
+To my father, Ahmed, for teaching me to think critically,\\ and to my mother, Eman, for teaching me to love unconditionally.
+\end{center}
 
 \doublespacing
 
@@ -55,13 +68,7 @@
 \tableofcontents
 
 \listoffigures
-\listoftables
-
-\chapter*{Acknowledgments}
-\addcontentsline{toc}{chapter}
-         {\protect\numberline{Acknowledgments\hspace{-96pt}}}
-
-Any acknowledgements???
+%\listoftables
 
 \pagestyle{fancy}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -79,11 +86,15 @@ Any acknowledgements???
 \onehalfspacing
 \input{tex/intro.tex}
 \input{tex/background.tex}
-\appendix
-\input{tex/appendix.tex}
+\input{tex/methodology.tex}
+\input{tex/results.tex}
+\input{tex/conclusion.tex}
+%\appendix
+%\input{tex/appendix.tex}
 
 %   this is for BibTeX.  remove if you plan to write the references in the document
-\bibliographystyle{plain}
+\bibliographystyle{IEEEtran}
+\nocite{*}
 \bibliography{tex/refs}
 
 

@@ -1,12 +1,15 @@
 \chapter{Introduction} \label{chap:intro}
-
-
+Since the early days of the robotics field, the idea of using vision for robot guidance has been a major research area. Due to major advances in the computer vision domain, and advances in manufacturing low cost vision-based sensors, the usage of vision-based sensors for robot guidance and manipulation has been considerably studied in the literature, and often preferred over other types of sensors due to their high cost and complexity. These vision sensors allow the robot to navigate autonomously in partially or totally unknown environments. An image of the current scene of the environment can be taken, processed, analyzed, and then decide actions for the robot in real time. This technique of using the visual sensor to control the motion of a robot is formally known as \textbf{Visual Servoing}.
 
 \section{Problem Definition} \label{sec:problemdefinition}
+Designing a robust and accurate visual servoing method is still a growing field of research. Because they rely on techniques from the computer vision and image processing fields, visual servoing methods inherit also their problems such as dealing with occlusions, illumination and colors differences, recovering geometrical features, detecting and matching feature points.
 
+Some works have suggested processing the acquired image through a geometric model. Whether to recover fully or partially the 3D pose of the scene and use that information in the visual servoing feedback loop. An early work based on the epipolar geometry, where the image information relies on the epipoles. This work and similar relied on the two-views geometry, stereo vision systems, for estimating the fundamental matrix and acquire the needed geometric information about the scene or the environment.
+
+More recent works have proposed using three-views geometry methods and estimate the trifocal tensor, which encapsulates the intrinsic geometry between the three views. It is analogous for the fundamental matrix in stereo vision systems. However these works didn't propose a generic analytical visual servoing method using the trifocal tensor. Either they presented an analytical 3-DOF special case of using the trifocal tensor with non-holonomic planar robots, or they presented a 6-DOF robot but with numerical estimation of the visual servoing interaction matrix.
 
 \section{Objectives}
-The purpose of this thesis is to design a visual servoing method for a 6-DOF system based on the trifoal tensor geometric properties. The main objective required is ensure that embedding the trifocal tensor into the visual servoing loop would still allow the servoing system to converge to the desired goal state. This can be achieved by:
+The purpose of this thesis is to design a visual servoing method for a 6-DOF system based on the trifocal tensor geometric properties. The main objective required is ensure that embedding the trifocal tensor into the visual servoing loop would still allow the servoing system to converge to the desired goal state. This can be achieved by:
 \begin{itemize}
   \item Researching the state of the art literature on using the trifocal tensor in visual servoing based systems.
   \item Developing an analytical form to embed the trifocal tensor into the visual servoing loop.
@@ -16,5 +19,4 @@ The purpose of this thesis is to design a visual servoing method for a 6-DOF sys
 
 \section{Document Organization}
 Chapter \ref{chap:background} begins by introducing the basic foundations and concepts that support the rest of this work: Trifocal Geometry, and Visual Servoing. As well as presenting previous works achieved combining these two topics together.
-Next, Chapter \ref{chap:vstt} presents the analytical development of the new method and the proposed algorithm to be implemented.
-The obtained results are discussed in details in Chapter \ref{chap:results}. Possible improvements and future work are discussed in Chapter \ref{chap:futurework}. Finally, Chapter \ref{chap:conclusion} presents an overall conclusion for the work in hand.
+Next, Chapter \ref{chap:methodology} presents the analytical development of the new method and the proposed algorithm to be implemented. The obtained results are discussed in details in Chapter \ref{chap:results}. Finally, Chapter \ref{chap:conclusion} presents an overall conclusion for the work in hand, as well as possible improvements and future work.

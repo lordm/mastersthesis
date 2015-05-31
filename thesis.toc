@@ -1,14 +1,37 @@
-\contentsline {chapter}{\numberline {Acknowledgments\hspace {-96pt}}}{iv}{chapter*.4}
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
 \contentsline {section}{\numberline {1.1}Problem Definition}{1}{section.1.1}
-\contentsline {section}{\numberline {1.2}Objectives}{1}{section.1.2}
-\contentsline {section}{\numberline {1.3}Document Organization}{1}{section.1.3}
+\contentsline {section}{\numberline {1.2}Objectives}{2}{section.1.2}
+\contentsline {section}{\numberline {1.3}Document Organization}{2}{section.1.3}
 \contentsline {chapter}{\numberline {2}Background}{3}{chapter.2}
 \contentsline {section}{\numberline {2.1}Trifocal Tensor}{3}{section.2.1}
 \contentsline {subsection}{\numberline {2.1.1}Tensor Notation}{3}{subsection.2.1.1}
 \contentsline {subsection}{\numberline {2.1.2}Three-View Geometry}{4}{subsection.2.1.2}
 \contentsline {subsection}{\numberline {2.1.3}Recovering Projection Matrices}{8}{subsection.2.1.3}
-\contentsline {section}{\numberline {2.2}Visual Servoing}{8}{section.2.2}
-\contentsline {section}{\numberline {2.3}Previous Works}{8}{section.2.3}
-\contentsline {chapter}{\numberline {A}The first appendix}{9}{appendix.A}
-\contentsline {chapter}{\numberline {Bibliography\hspace {-96pt}}}{10}{appendix*.7}
+\contentsline {subsection}{\numberline {2.1.4}Estimating Trifocal Tensor}{8}{subsection.2.1.4}
+\contentsline {section}{\numberline {2.2}Visual Servoing}{10}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Basic Framework of Visual Servoing}{10}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Image-Based Visual Servoing (IBVS)}{11}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}Position-Based Visual Servoing (PBVS)}{12}{subsection.2.2.3}
+\contentsline {section}{\numberline {2.3}Previous Works}{14}{section.2.3}
+\contentsline {chapter}{\numberline {3}Methodology}{15}{chapter.3}
+\contentsline {section}{\numberline {3.1}Control Law}{15}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}Coefficients of the Trifocal Tensor}{16}{subsection.3.1.1}
+\contentsline {subsection}{\numberline {3.1.2}Tensor Derivation}{18}{subsection.3.1.2}
+\contentsline {subsection}{\numberline {3.1.3}Interaction Matrix}{20}{subsection.3.1.3}
+\contentsline {section}{\numberline {3.2}Tensor Normalization}{23}{section.3.2}
+\contentsline {section}{\numberline {3.3}Proposed Method}{28}{section.3.3}
+\contentsline {chapter}{\numberline {4}Experimental Results}{29}{chapter.4}
+\contentsline {section}{\numberline {4.1}Experimental Setup}{29}{section.4.1}
+\contentsline {section}{\numberline {4.2}Experiment I: Pure Translation along x-axis, y-axis}{31}{section.4.2}
+\contentsline {section}{\numberline {4.3}Experiment II: Pure Translation along z-axis}{34}{section.4.3}
+\contentsline {section}{\numberline {4.4}Experiment III: Translation along xyz-axes}{35}{section.4.4}
+\contentsline {section}{\numberline {4.5}Experiment IV: Large rotation around z-axis}{36}{section.4.5}
+\contentsline {section}{\numberline {4.6}Experiment V: Generic Motion}{38}{section.4.6}
+\contentsline {chapter}{\numberline {5}Conclusion and Future Work}{43}{chapter.5}
+\contentsline {section}{\numberline {5.1}Conclusion}{43}{section.5.1}
+\contentsline {section}{\numberline {5.2}Future Work}{44}{section.5.2}
+\contentsline {subsection}{\numberline {5.2.1}Using A Subset of the Trifocal Tensor Coefficients}{44}{subsection.5.2.1}
+\contentsline {subsection}{\numberline {5.2.2}Stability Analysis}{44}{subsection.5.2.2}
+\contentsline {subsection}{\numberline {5.2.3}Estimating The Initial Pose}{44}{subsection.5.2.3}
+\contentsline {subsection}{\numberline {5.2.4}Uncalibrated Camera}{44}{subsection.5.2.4}
+\contentsline {chapter}{\numberline {Bibliography\hspace {-96pt}}}{46}{chapter*.20}

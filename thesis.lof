@@ -1,0 +1,21 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Trifocal geometry of three views\relax }}{5}{figure.caption.4}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces A 3D representation of the trifocal tensor $l_{i} = l_{j}^{\prime } l_{k}^{\prime \prime } \mathcal {T}_{i}^{jk}$ \relax }}{7}{figure.caption.5}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Block diagram of the basic Visual Servoing loop control\relax }}{10}{figure.caption.6}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Block diagram of the proposed Trifocal Tensor Visual Servoing loop control\relax }}{28}{figure.caption.7}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Experimental Setup (a) Image view with Current/Desired camera projected images plotted in blue/red, with the points trajectory in green. (b) Scene view with initial/current/desired cameras plotted in green/blue/red, with the camera trajectory in green.\relax }}{30}{figure.caption.8}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Translation along x-axis using tensor from poses. (a) Image view. (b) Scene view. (c) Camera velocities. (d) Tensor coefficients error.\relax }}{32}{figure.caption.9}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Translation along x-axis using estimated tensor. (a) Image view. (b) Scene view. (c) Camera velocities. (d) Tensor coefficients error.\relax }}{33}{figure.caption.10}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Comparison between tensor coefficients error when (a) using all tensor coefficients (b) using a subset of tensor coefficients.\relax }}{34}{figure.caption.11}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Translation along z-axis using tensor from poses. (a) Image view. (b) Scene view. (c) Camera velocities. (d) Tensor coefficients error.\relax }}{35}{figure.caption.12}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Translation along z-axis using estimated tensor. (a) Image view. (b) Scene view. (c) Camera velocities. (d) Tensor coefficients error.\relax }}{36}{figure.caption.13}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Translation along xyz-axes using tensor from poses. (a) Image view. (b) Scene view. (c) Camera velocities. (d) Tensor coefficients error.\relax }}{37}{figure.caption.14}
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Translation along xyz-axes using estimated tensor. (a) Image view. (b) Scene view. (c) Camera velocities. (d) Tensor coefficients error.\relax }}{38}{figure.caption.15}
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Translation and large rotation along z-axis using tensor from poses. (a) Image view. (b) Scene view. (c) Camera velocities. (d) Tensor coefficients error.\relax }}{39}{figure.caption.16}
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Translation and large rotation along z-axis using estimated tensor. (a) Image view. (b) Scene view. (c) Camera velocities. (d) Tensor coefficients error.\relax }}{40}{figure.caption.17}
+\contentsline {figure}{\numberline {4.11}{\ignorespaces Generic motion using tensor from poses. (a) Image view. (b) Scene view. (c) Camera velocities. (d) Tensor coefficients error.\relax }}{41}{figure.caption.18}
+\contentsline {figure}{\numberline {4.12}{\ignorespaces Generic motion using estimated tensor. (a) Image view. (b) Scene view. (c) Camera velocities. (d) Tensor coefficients error.\relax }}{42}{figure.caption.19}
+\addvspace {10\p@ }
