@@ -10,13 +10,14 @@ thesis:
 paper:
 	pdflatex paper.tex
 
-poster:
-	pdflatex poster.tex
-
-poster2:
+poster_landscape:
 	pdflatex poster_landscape.tex
 
-poster3:
+poster_portrait:
+	pdflatex poster_portrait.tex
+
+posters:
+	pdflatex poster_landscape.tex
 	pdflatex poster_portrait.tex
 
 presentation:

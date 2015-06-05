@@ -1,0 +1,85 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+%\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out
+                                                          % if you need a4paper
+\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
+                                                          % paper
+
+\IEEEoverridecommandlockouts                              % This command is only
+                                                          % needed if you want to
+                                                          % use the \thanks command
+\overrideIEEEmargins
+
+\usepackage{epsf,graphicx}
+\usepackage{latexsym,amssymb}
+\usepackage{setspace,cite}
+\usepackage{parskip}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage[bookmarks=true,pdfborder={0 0 0}]{hyperref}
+\usepackage{subcaption}
+\usepackage{tensor}
+\usepackage{lscape}
+%\usepackage[export]{adjustbox}
+%\usepackage{mdframed}
+\usepackage{textcomp}
+\providecommand{\e}[1]{\ensuremath{10^{#1}}}
+%\allowdisplaybreaks%%%
+
+\title{\LARGE \bf
+Visual Servoing Using Trifocal Tensor
+}
+
+\author{\IEEEauthorblockN{Marwan Osman}
+  \IEEEauthorblockA{University of Burgundy\\
+    71200 Le Creusot, France\\
+    email: marwan.aosman@gmail.com}% <-this % stops a space
+\and
+\IEEEauthorblockN{Fran\c{c}ois Chaumette}
+\IEEEauthorblockA{INRIA Rennes-Bretagne Atlantique and IRISA\\
+  35042 Rennes, France\\
+  email: francois.Chaumette@irisa.fr}
+}
+
+\author{ \parbox{3 in}{\centering Marwan Osman\\
+         University of Burgundy\\
+         71200 Le Creusot, France\\
+         {\tt\small marwan.aosman@gmail.com}}
+         \hspace*{ 0.5 in}
+         \parbox{3 in}{ \centering Fran\c{c}ois Chaumette\\
+          INRIA Rennes-Bretagne Atlantique and IRISA\\
+         35042 Rennes, France\\
+         {\tt\small francois.Chaumette@irisa.fr}}
+}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+Visual servoing is an approach for controlling the motion of a robotic system from visual measurements. Many works have been realized in the past in this area, and is mainly divided into two main categories: Image-based, and Pose-based Visual Servoing. The trifocal tensor is well known in computer vision for tracing geometric information from three images of the same scene. The purpose of this thesis is to design a visual servoing method of a 6-DOF robot based on the trifocal tensor coefficients. Few studies where conducted on this area but they didn't provide a generic analytical solution for 6-DOF robots. This method differs than the two main visual servoing approaches as the control loop is closed over projective measures, which are the trifocal tensor elements. These projective measures are found directly from images across three views, without explicitly recovering the camera pose or directly closing the loop in the image space. The trifocal tensor geometric model is more robust than the two view geometry models as it involves the information given by a third view, and the set of correspondences obtained is more robust to outliers.
+\end{abstract}
+
+\input{texpaper/introduction}
+\input{texpaper/background}
+\input{texpaper/methodology}
+\input{texpaper/results}
+\input{texpaper/conclusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{IEEEtran}
+\nocite{*}
+\bibliography{tex/refs}
+%\begin{thebibliography}{99}
+%\bibitem{c1}
+  %Qingmao Hu, Guoyu Qian, Aziz A. and Nowinski W.L., {\it Segmentation of brain from computed tomography head images}, Engineering in Medicine and Biology  Society 27th Annual International Conference, 2005. IEEE-EMBS 2005.
+%\end{thebibliography}
+\end{document}
